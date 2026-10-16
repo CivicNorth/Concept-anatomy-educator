@@ -33,12 +33,26 @@ No terminal? Paste the file into https://www.online-python.com and press Run.
 
 ## The lessons
 
-| # | File | You learn | Time |
-|---|------|-----------|------|
-| 1 | `01_print_and_variables.py` | showing text, storing numbers | 8 min |
-| 2 | `02_math.py` | doing math with stored numbers | 8 min |
-| 3 | `03_lists.py` | holding many numbers in one list | 10 min |
-| 4 | `04_loops.py` | repeating work without copy-paste | 10 min |
-| 5 | `05_if_else.py` | making decisions | 10 min |
-| 6 | `06_functions.py` | making your own commands | 12 min |
-| 7 | `07_mini_project.py` | putting it all together: a working gauge | 15 min |
+Each lesson is an **SVG card**, drawn with this repo's own isometric kit
+(`kit/iso-kit.mjs`) in the same style as the dial indicator. Look at the
+card first, then open its practice `.py` file and do the three steps.
+
+| # | Card | Practice file | Time |
+|---|------|---------------|------|
+| 1 | [Variables](01-variables.svg) | `01_print_and_variables.py` | 8 min |
+| 2 | [Math](02-math.svg) | `02_math.py` | 8 min |
+| 3 | [Lists](03-lists.svg) | `03_lists.py` | 10 min |
+| 4 | [Loops](04-loops.svg) | `04_loops.py` | 10 min |
+| 5 | [if / else](05-if-else.svg) | `05_if_else.py` | 10 min |
+| 6 | [Functions](06-functions.svg) | `06_functions.py` | 12 min |
+| 7 | [Mini project](07-mini-project.svg) | `07_mini_project.py` | 15 min |
+
+![Lesson 1](01-variables.svg)
+![Lesson 2](02-math.svg)
+![Lesson 3](03-lists.svg)
+![Lesson 4](04-loops.svg)
+![Lesson 5](05-if-else.svg)
+![Lesson 6](06-functions.svg)
+![Lesson 7](07-mini-project.svg)
+
+To redraw the cards after editing them: `node learn-python/build.mjs`
