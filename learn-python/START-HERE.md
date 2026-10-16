@@ -47,12 +47,13 @@ card first, then open its practice `.py` file and do the three steps.
 | 6 | [Functions](06-functions.svg) | `06_functions.py` | 12 min |
 | 7 | [Mini project](07-mini-project.svg) | `07_mini_project.py` | 15 min |
 
-![Lesson 1](01-variables.svg)
-![Lesson 2](02-math.svg)
-![Lesson 3](03-lists.svg)
-![Lesson 4](04-loops.svg)
-![Lesson 5](05-if-else.svg)
-![Lesson 6](06-functions.svg)
-![Lesson 7](07-mini-project.svg)
+![Lesson 1](png/01-variables.png)
+![Lesson 2](png/02-math.png)
+![Lesson 3](png/03-lists.png)
+![Lesson 4](png/04-loops.png)
+![Lesson 5](png/05-if-else.png)
+![Lesson 6](png/06-functions.png)
+![Lesson 7](png/07-mini-project.png)
 
-To redraw the cards after editing them: `node learn-python/build.mjs`
+The cards are SVGs; the `png/` folder has picture copies that open in any app.
+To redraw the SVGs after editing them: `node learn-python/build.mjs`

@@ -523,10 +523,10 @@ function card(lesson) {
   y += PAD;
 
   const H = Math.round(y);
-  return `<svg xmlns="http://www.w3.org/2000/svg" class="iso" data-theme="light" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Lesson ${lesson.n}: ${esc(lesson.title)}"><style>${k.ISO_CSS}${CARD_CSS}</style><rect class="card" width="${W}" height="${H}"/>${out.join("")}</svg>\n`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" class="iso" data-theme="light" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Lesson ${lesson.n}: ${esc(lesson.title)}">\n<style>${k.ISO_CSS}${CARD_CSS}</style><rect class="card" width="${W}" height="${H}"/>\n${out.join("\n")}\n</svg>\n`;
 }
 
 for (const lesson of LESSONS) {
-  writeFileSync(join(HERE, `${lesson.slug}.svg`), card(lesson));
+  writeFileSync(join(HERE, `${lesson.slug}.svg`), card(lesson).replace(/(\/>|<\/g>)</g, "$1\n<"));
   console.log(`wrote learn-python/${lesson.slug}.svg`);
 }
