@@ -1,5 +1,12 @@
 # Learn Python with the Dial Indicator
 
+> **Start with the interactive version:** open [`python-bench.html`](python-bench.html)
+> in a browser (download it, then double-click). You write Python in the page,
+> press Run, and the dial indicator moves to match your code. Each lesson's
+> challenge checks itself. Rebuild it with `node learn-python/interactive/build.mjs`.
+>
+> The cards and `.py` files below are the same lessons for offline practice.
+
 You'll learn Python by rebuilding one small machine from this repo, the
 **dial indicator** (`examples/dial-indicator/`), as Python code.
 

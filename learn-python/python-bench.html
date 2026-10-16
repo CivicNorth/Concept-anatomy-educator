@@ -1,0 +1,1987 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>
+<title>Python Bench</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+.iso{
+  --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
+  --anatomy-paper:#131313;--anatomy-face:#1b1b1b;--anatomy-top:#1c1c1c;
+  --anatomy-shade-0:#0f0f0f;--anatomy-shade-1:#121212;--anatomy-shade-2:#151515;--anatomy-shade-3:#181818;
+  --anatomy-lit-top:#262626;--anatomy-lit-shade:#1d1d1d;
+  --anatomy-hi:#d4d4d4;--anatomy-mid:#6a6a6a;--anatomy-lo:#3e3e3e;--anatomy-faint:#2a2a2a;--anatomy-lit:#ffffff;
+  --anatomy-halo:#050505;--anatomy-halo-opacity:.9;--anatomy-dot:#e6e6e6;
+  --anatomy-red:#ff6b6b;--anatomy-green:#6be0a0;--anatomy-blue:#6b9bff;
+  --anatomy-weight:.6px;--anatomy-ease:cubic-bezier(.32,.72,0,1);
+  --anatomy-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --anatomy-lift:inset 0 1px 0 0 #ffffff0a,inset 0 0 0 1px #ffffff06,0 0 0 1px #00000026,0 1px 1px -.5px #00000014,0 3px 3px -1.5px #00000014,0 6px 6px -3px #00000014,0 12px 12px -6px #00000014;
+}
+.iso[data-theme="light"]{
+  --anatomy-page:#f2f2ef;--anatomy-card:#fbfbfa;--anatomy-text:#57575a;--anatomy-strong:#18181a;--anatomy-muted:#8c8c90;
+  --anatomy-paper:#fbfbfa;--anatomy-face:#ffffff;--anatomy-top:#ffffff;
+  --anatomy-shade-0:#dcdcd9;--anatomy-shade-1:#e5e5e2;--anatomy-shade-2:#ededea;--anatomy-shade-3:#f4f4f1;
+  --anatomy-lit-top:#ffffff;--anatomy-lit-shade:#eeeeeb;
+  --anatomy-hi:#26262a;--anatomy-mid:#8a8a8f;--anatomy-lo:#b4b4b8;--anatomy-faint:#d4d4d6;--anatomy-lit:#000000;
+  --anatomy-halo:#8a8a80;--anatomy-halo-opacity:.32;--anatomy-dot:#3a3a3e;
+  --anatomy-red:#e5484d;--anatomy-green:#30a46c;--anatomy-blue:#3e63dd;
+  --anatomy-lift:inset 0 1px 0 0 #ffffff,0 0 0 1px #0000000f,0 1px 1px -.5px #0000000a,0 3px 3px -1.5px #0000000a,0 6px 6px -3px #0000000a,0 12px 12px -6px #0000000a;
+}
+.iso-svg{display:block;width:100%;height:auto;overflow:visible}
+.iso-svg path,.iso-svg circle{vector-effect:non-scaling-stroke}
+.iso-fill{fill:var(--anatomy-paper);stroke:none}
+.iso-solid[data-lit]>.iso-fill{fill:var(--anatomy-face)}
+.iso-shade,.iso-top{stroke:none}
+.iso-shade[data-shade="0"]{fill:var(--anatomy-shade-0)}
+.iso-shade[data-shade="1"]{fill:var(--anatomy-shade-1)}
+.iso-shade[data-shade="2"]{fill:var(--anatomy-shade-2)}
+.iso-shade[data-shade="3"]{fill:var(--anatomy-shade-3)}
+.iso-top{fill:var(--anatomy-top)}
+.iso-solid[data-lit]>.iso-top{fill:var(--anatomy-lit-top)}
+.iso-solid[data-lit]>.iso-shade{fill:var(--anatomy-lit-shade)}
+.iso-solid[data-seamless]>.iso-shade,.iso-solid[data-seamless]>.iso-top{stroke-width:.4;stroke-linejoin:round}
+.iso-solid[data-seamless]>.iso-shade[data-shade="0"]{stroke:var(--anatomy-shade-0)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="1"]{stroke:var(--anatomy-shade-1)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="2"]{stroke:var(--anatomy-shade-2)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="3"]{stroke:var(--anatomy-shade-3)}
+.iso-solid[data-seamless]>.iso-top{stroke:var(--anatomy-top)}
+.iso-solid[data-seamless][data-lit]>.iso-top{stroke:var(--anatomy-lit-top)}
+.iso-solid[data-seamless][data-lit]>.iso-shade{stroke:var(--anatomy-lit-shade)}
+.iso-solid[data-lit]>.iso-edge{stroke:var(--anatomy-lit)}
+.iso-halo{fill:var(--anatomy-halo);stroke:none;filter:blur(9px);opacity:var(--anatomy-halo-opacity);transform:translateY(3px)}
+.iso-line{fill:none;stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight);stroke-linecap:round;stroke-linejoin:round}
+.iso-line[data-tone="hi"]{stroke:var(--anatomy-hi)}
+.iso-line[data-tone="mid"]{stroke:var(--anatomy-mid)}
+.iso-line[data-tone="lo"]{stroke:var(--anatomy-lo)}
+.iso-line[data-tone="faint"]{stroke:var(--anatomy-faint)}
+.iso-line[data-tone="lit"]{stroke:var(--anatomy-lit)}
+.iso-line[data-tone="red"]{stroke:var(--anatomy-red)}
+.iso-line[data-tone="green"]{stroke:var(--anatomy-green)}
+.iso-line[data-tone="blue"]{stroke:var(--anatomy-blue)}
+.iso-line[data-dotted]{stroke-dasharray:.01 3.5;stroke-width:1}
+.iso-line[data-dashed]{stroke-dasharray:3 3}
+.iso-line[data-flow]{stroke-dasharray:2 6}
+.iso-wire-end{fill:var(--anatomy-paper);stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight)}
+.iso-wire[data-tone="hi"] .iso-wire-end{stroke:var(--anatomy-hi)}
+.iso-wire[data-tone="mid"] .iso-wire-end{stroke:var(--anatomy-mid)}
+.iso-wire[data-tone="faint"] .iso-wire-end{stroke:var(--anatomy-faint)}
+.iso-wire[data-tone="lit"] .iso-wire-end{stroke:var(--anatomy-lit)}
+.iso-dots circle{fill:var(--anatomy-dot);stroke:none;opacity:.32}
+.iso-dots[data-tone="hi"] circle{opacity:.85}
+.iso-dots[data-tone="mid"] circle{opacity:.45}
+.iso-dots[data-tone="lo"] circle{opacity:.22}
+.iso-dots[data-tone="faint"] circle{opacity:.12}
+.iso-face-text{fill:var(--anatomy-mid);font-family:var(--anatomy-mono);letter-spacing:.04em}
+.iso-face-text[data-tone="hi"]{fill:var(--anatomy-hi)}
+.iso-face-text[data-tone="lo"]{fill:var(--anatomy-lo)}
+.iso-face-text[data-tone="faint"]{fill:var(--anatomy-faint)}
+.tb-body{fill:var(--anatomy-shade-2);stroke:none}
+.tb-shine{fill:var(--anatomy-top);stroke:none}
+.tb-shade{fill:var(--anatomy-shade-0);stroke:none}
+.tb-ring{fill:none;stroke:var(--anatomy-lo);stroke-width:.45;stroke-linecap:butt;stroke-linejoin:round}
+.tb-ring[data-tone="mid"]{stroke:var(--anatomy-mid)}
+.tb-ring[data-tone="faint"]{stroke:var(--anatomy-faint)}
+.tb-ring[data-tone="hi"]{stroke:var(--anatomy-hi)}
+@keyframes iso-flow{to{stroke-dashoffset:-32}}
+@keyframes iso-pulse{0%,100%{opacity:.18}12%{opacity:1}40%{opacity:.18}}
+.iso-line[data-flow]{animation:iso-flow 1600ms linear infinite}
+.iso-dots circle[data-pulse]{animation:iso-pulse 1600ms steps(1,end) infinite;animation-delay:var(--pulse-at,0ms)}
+.iso-figure{margin:32px 0 36px}
+.iso-plate{position:relative;padding:52px 24px;border-radius:0;background:var(--anatomy-card);box-shadow:0 0 0 1px var(--anatomy-mid);--anatomy-paper:var(--anatomy-card)}
+.iso-plate-corners{position:absolute;inset:18px 20px;pointer-events:none}
+.iso-plate-corner{position:absolute;color:var(--anatomy-muted);font-family:var(--anatomy-mono);font-size:10.5px;line-height:1;letter-spacing:.04em;white-space:nowrap}
+.iso-plate-corner[data-corner="fig"]{top:0;left:0;color:var(--anatomy-text)}
+.iso-plate-corner[data-corner="title"]{top:0;right:0;text-transform:uppercase;letter-spacing:.1em}
+.iso-plate-corner[data-corner="hint"]{bottom:0;left:0;text-transform:uppercase;letter-spacing:.1em}
+.iso-plate-corner[data-corner="readout"]{right:0;bottom:0;color:var(--anatomy-text);font-variant-numeric:tabular-nums}
+.iso-plate .iso-svg{margin:0 auto}
+.iso-legend{display:grid;gap:8px;margin-top:12px;color:var(--anatomy-muted);font-size:13px;line-height:1.55}
+.iso-keys{display:flex;flex-wrap:wrap;gap:6px 18px}
+.iso-key{display:inline-flex;align-items:center;gap:7px}
+.iso-swatch{width:16px;height:10px;flex:none;overflow:visible}
+.iso-swatch path{fill:none;stroke:var(--anatomy-hi);stroke-width:1;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+.iso-swatch[data-mark="raised"] path,.iso-swatch[data-mark="flat"] path{stroke:var(--anatomy-mid)}
+.iso-swatch[data-mark="lit"] path{stroke:var(--anatomy-lit)}
+.iso-swatch[data-mark="dim"] path{stroke:var(--anatomy-lo)}
+.iso-swatch[data-mark="dotted"] path{stroke-dasharray:.01 3;stroke-width:1.4}
+.iso-swatch[data-mark="dashed"] path{stroke-dasharray:3 2.5}
+.iso-swatch[data-mark="red"] path{stroke:var(--anatomy-red)}
+.iso-swatch[data-mark="green"] path{stroke:var(--anatomy-green)}
+.iso-swatch[data-mark="blue"] path{stroke:var(--anatomy-blue)}
+.iso-swatch-crease{stroke:var(--anatomy-lo)!important}
+@media (max-width:560px){.iso-plate{padding:48px 12px 70px}.iso-plate-corner[data-corner="hint"]{bottom:18px}}
+@media (prefers-reduced-motion:reduce){.iso-line[data-flow],.iso-dots circle[data-pulse]{animation:none}}
+
+/* Layout: a workbench. Machine on the left, your code on the right, the mission underneath. */
+:root {
+  --bg: #eceef1;
+  --panel: #fbfcfd;
+  --ink: #14171b;
+  --ink-2: #49515b;
+  --muted: #7a838e;
+  --line: #d3d8de;
+  --accent: #2f5bd3;
+  --accent-soft: #e3e9fb;
+  --good: #1d7f53;
+  --good-soft: #e1f2e9;
+  --bad: #c9392f;
+  --code-bg: #f4f6f8;
+  --display: "IBM Plex Sans Condensed", "IBM Plex Sans", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d0f12; --panel: #15181c; --ink: #e9ecef; --ink-2: #aab2bb; --muted: #737c86; --line: #2a3037;
+    --accent: #84a2ff; --accent-soft: #1b2440; --good: #52d394; --good-soft: #13281e; --bad: #ff7b6f; --code-bg: #101317;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d0f12; --panel: #15181c; --ink: #e9ecef; --ink-2: #aab2bb; --muted: #737c86; --line: #2a3037;
+  --accent: #84a2ff; --accent-soft: #1b2440; --good: #52d394; --good-soft: #13281e; --bad: #ff7b6f; --code-bg: #101317;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.55 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-block: 20px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  gap: 20px;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, textarea:focus-visible, .stage:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* top bar */
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
+.brand { display: grid; gap: 2px; }
+.brand b { font: 600 22px/1.1 var(--display); letter-spacing: .01em; }
+.brand span { font: 12px/1.3 var(--mono); color: var(--muted); letter-spacing: .04em; }
+.track { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.chips { display: flex; gap: 6px; }
+.chip {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--panel);
+  font: 600 14px/1 var(--mono); color: var(--ink-2);
+}
+.chip.done { background: var(--good-soft); border-color: var(--good); color: var(--good); }
+.chip[aria-current="step"] { border: 2px solid var(--accent); color: var(--accent); }
+.meter { display: grid; gap: 4px; min-width: 120px; }
+.meter span { font: 12px var(--mono); color: var(--muted); }
+.bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: calc(var(--p, 0) * 100%); background: var(--good); transition: width .4s; }
+
+/* lesson head */
+.head { display: grid; gap: 6px; max-width: 70ch; }
+.eyebrow { margin: 0; font: 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.head h1 { margin: 0; font: 600 clamp(28px, 4vw, 40px)/1.08 var(--display); text-wrap: balance; }
+.idea { margin: 0; color: var(--ink-2); font-size: 17px; }
+
+/* bench */
+.bench { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 980px) { .bench { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); } }
+
+.fig { margin: 0; display: grid; gap: 10px; min-width: 0; }
+.fig.iso[data-theme] {
+  --anatomy-card: var(--panel); --anatomy-paper: var(--panel);
+  --anatomy-blue: var(--accent); --anatomy-red: var(--bad); --anatomy-green: var(--good);
+  --anatomy-weight: .9px;
+}
+.fig .iso-plate { padding: 44px 12px 40px; box-shadow: 0 0 0 1px var(--line); }
+.fig .iso-plate-corner { font-size: 11px; }
+.stage { display: block; border-radius: 2px; }
+.stage svg { max-width: 100%; }
+.lab { font: 500 14px var(--mono); fill: var(--ink); }
+.lab-big { font: 600 17px var(--mono); fill: var(--ink); }
+.lab-small { font: 12px var(--mono); fill: var(--ink-2); }
+.muted { fill: var(--muted); }
+.accent { fill: var(--accent); }
+.good { fill: var(--good); }
+.bad, .warn { fill: var(--bad); }
+.leader { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; }
+.accent-line { stroke: var(--accent); }
+.flow { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 3 5; animation: flow 1.2s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -16; } }
+.pin-bad { fill: var(--bad); }
+@media (max-width: 600px) {
+  .lab { font-size: 19px; }
+  .lab-big { font-size: 22px; }
+  .lab-small { font-size: 16px; }
+  .fig .iso-plate { padding: 40px 6px 36px; }
+}
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ctl-label { font-size: 14px; color: var(--muted); margin-right: 4px; }
+.ctl {
+  padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel);
+  font: 500 14px var(--mono);
+}
+.ctl:hover { border-color: var(--accent); color: var(--accent); }
+.ctl[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+
+/* code side */
+.work { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.editor, .console { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; min-width: 0; }
+.bar-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+.tag { font: 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.link { background: none; border: 0; padding: 2px 4px; font-size: 13px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.link:hover { color: var(--accent); }
+textarea {
+  display: block; width: 100%; min-height: 300px; resize: vertical; border: 0; margin: 0;
+  padding: 14px 16px; background: var(--code-bg); color: var(--ink);
+  font: 15px/1.6 var(--mono); tab-size: 4; white-space: pre; overflow: auto;
+}
+.run-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.primary {
+  padding: 9px 22px; border-radius: 6px; border: 0; background: var(--accent); color: var(--panel);
+  font: 600 15px var(--body);
+}
+.primary:disabled { opacity: .6; }
+.kbd { font: 12px var(--mono); color: var(--muted); }
+pre#out { margin: 0; padding: 12px 16px; min-height: 64px; max-height: 220px; overflow: auto; font: 14.5px/1.55 var(--mono); color: var(--good); white-space: pre-wrap; }
+pre#out.empty { color: var(--muted); }
+.err { margin: 0 12px 12px; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--bad); display: grid; gap: 4px; }
+.err code { font: 13.5px var(--mono); color: var(--bad); overflow-wrap: anywhere; }
+.err p { margin: 0; font-size: 15px; }
+.py-status { margin: 0; padding: 10px 12px; border: 1px solid var(--bad); border-radius: 6px; color: var(--bad); }
+
+/* mission */
+.mission { display: grid; gap: 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 760px) { .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.steps li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 2px 10px; align-items: start; padding: 12px; border-radius: 6px; border: 1px solid var(--line); }
+.steps li::before {
+  content: attr(data-n); grid-row: span 2; width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center; border: 1px solid var(--line); font: 600 13px var(--mono); color: var(--muted);
+}
+.steps li.done { border-color: var(--good); background: var(--good-soft); }
+.steps li.done::before { content: "✓"; background: var(--good); border-color: var(--good); color: var(--panel); }
+.steps b { font: 600 13px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.steps p { margin: 0; font-size: 15px; color: var(--ink-2); }
+#s-win.done b { color: var(--good); }
+details { font-size: 15px; }
+summary { cursor: pointer; color: var(--accent); font-weight: 500; }
+details p { margin: 8px 0; color: var(--ink-2); }
+.ghost { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: none; font-size: 14px; }
+.foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.repo { margin: 0; font: 13px var(--mono); color: var(--muted); overflow-wrap: anywhere; min-width: 0; flex: 1 1 280px; }
+.nav { display: flex; gap: 8px; }
+.nav button { padding: 9px 16px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); font-weight: 500; }
+.nav button:disabled { opacity: .4; cursor: default; }
+.nav button.ready { background: var(--good); border-color: var(--good); color: var(--panel); }
+@media (prefers-reduced-motion: reduce) { .flow { animation: none; } .bar i { transition: none; } }
+</style>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><b>Python Bench</b><span>Learn Python on the repo's dial indicator</span></div>
+    <nav class="track" aria-label="Lessons">
+      <div class="chips" id="chips"></div>
+      <div class="meter"><span id="progress-text">0 of 7 done</span><div class="bar" id="progress-bar"><i></i></div></div>
+    </nav>
+  </header>
+
+  <section class="head">
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1 id="title"></h1>
+    <p class="idea" id="idea"></p>
+  </section>
+
+  <section class="bench">
+    <figure class="fig iso" id="fig">
+      <div class="iso-plate">
+        <div class="iso-plate-corners" aria-hidden="true">
+          <span class="iso-plate-corner" data-corner="fig" id="corner-fig"></span>
+          <span class="iso-plate-corner" data-corner="title" id="corner-title"></span>
+          <span class="iso-plate-corner" data-corner="hint" id="corner-hint"></span>
+          <span class="iso-plate-corner" data-corner="readout" id="corner-readout"></span>
+        </div>
+        <div class="stage" id="stage" tabindex="0"></div>
+      </div>
+      <div class="controls" id="controls"></div>
+    </figure>
+
+    <div class="work">
+      <p class="py-status" id="py-status" hidden>Python couldn't load, so the Run button won't work. Check your connection and reload.</p>
+      <div class="editor">
+        <div class="bar-row"><span class="tag">Your code</span><button class="link" id="reset" type="button">Reset to the start</button></div>
+        <label class="tag" for="code" hidden>Python code</label>
+        <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Python code"></textarea>
+        <div class="run-row"><button class="primary" id="run" type="button">Run ▸</button><span class="kbd">or Ctrl + Enter · Tab adds 4 spaces</span></div>
+      </div>
+      <div class="console" aria-live="polite">
+        <div class="bar-row"><span class="tag">What Python printed</span></div>
+        <pre id="out"></pre>
+        <div class="err" id="err" hidden><code id="err-type"></code><p id="err-help"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mission" aria-label="Your mission">
+    <ol class="steps">
+      <li id="s-run" data-n="1"><b>Run it</b><p>Press Run and watch the machine and the output.</p></li>
+      <li id="s-change" data-n="2"><b>Change one thing</b><p id="challenge"></p></li>
+      <li id="s-win" data-n="3"><b>Win</b><p id="win-text" hidden></p></li>
+    </ol>
+    <details id="hint-box"><summary>Stuck? Show a hint</summary><p id="hint"></p><button class="ghost" id="answer" type="button">Put the answer in the editor</button></details>
+    <div class="foot">
+      <p class="repo">In the repo → <span id="repo"></span></p>
+      <div class="nav"><button id="prev" type="button">← Back</button><button id="next" type="button">Next lesson →</button></div>
+    </div>
+  </section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+<script>
+const k = (() => {
+const AZIMUTH = 45;
+const ELEVATION = 30;
+const SHADES = 4;
+const RADIANS = Math.PI / 180;
+const UNIT = Math.sqrt(1.6);
+function cameraOf({ scale, azimuth = AZIMUTH, elevation = ELEVATION }) {
+    const a = azimuth * RADIANS;
+    const e = elevation * RADIANS;
+    return { sinA: Math.sin(a), cosA: Math.cos(a), sinE: Math.sin(e), cosE: Math.cos(e), k: scale * UNIT };
+}
+function iso([x, y, z], projection) {
+    const { origin } = projection;
+    const { sinA, cosA, sinE, cosE, k } = cameraOf(projection);
+    return [origin[0] + (x * sinA - y * cosA) * k, origin[1] + ((x * cosA + y * sinA) * sinE - z * cosE) * k];
+}
+function towardViewer(projection) {
+    const { sinA, cosA } = cameraOf(projection);
+    return [cosA, sinA];
+}
+function depthOf([x, y, z], projection) {
+    const { sinA, cosA, sinE, cosE } = cameraOf(projection);
+    return (x * cosA + y * sinA) * cosE + z * sinE;
+}
+const tenth = (value) => {
+    const text = (Math.round(value * 10) / 10).toFixed(1).replace(/\.0$/, "");
+    return text === "-0" ? "0" : text;
+};
+function pathOf(points, closed = false) {
+    if (!points.length)
+        return "";
+    return points.map(([x, y], at) => `${at ? "L" : "M"}${tenth(x)} ${tenth(y)}`).join("") + (closed ? "Z" : "");
+}
+const joinPaths = (paths) => paths.filter(Boolean).join("");
+function roundedPlan({ x, y, w, d, r }, steps = 8) {
+    const radius = Math.max(0, Math.min(r, w / 2, d / 2));
+    const corners = [
+        [x + w - radius, y + radius, -90],
+        [x + w - radius, y + d - radius, 0],
+        [x + radius, y + d - radius, 90],
+        [x + radius, y + radius, 180],
+    ];
+    const out = [];
+    for (const [cx, cy, start] of corners) {
+        const count = radius > 0 ? steps : 0;
+        for (let step = 0; step <= count; step++) {
+            const angle = (start + (count ? (90 * step) / count : 45)) * RADIANS;
+            out.push([cx + radius * Math.cos(angle), cy + radius * Math.sin(angle)]);
+        }
+    }
+    return out;
+}
+function signedArea(points) {
+    let area = 0;
+    for (let index = 0; index < points.length; index++) {
+        const [ax, ay] = points[index];
+        const [bx, by] = points[(index + 1) % points.length];
+        area += ax * by - bx * ay;
+    }
+    return area / 2;
+}
+const oriented = (points) => (signedArea(points) < 0 ? [...points].reverse() : points);
+function convexHull(points) {
+    const sorted = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    if (sorted.length < 3)
+        return sorted;
+    const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+    const lower = [];
+    for (const point of sorted) {
+        while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], point) <= 0)
+            lower.pop();
+        lower.push(point);
+    }
+    const upper = [];
+    for (let index = sorted.length - 1; index >= 0; index--) {
+        const point = sorted[index];
+        while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], point) <= 0)
+            upper.pop();
+        upper.push(point);
+    }
+    return [...lower.slice(0, -1), ...upper.slice(0, -1)];
+}
+function runsOf(flags, want) {
+    const count = flags.length;
+    const runs = [];
+    const start = flags.findIndex((flag, index) => flag !== flags[(index + count - 1) % count]);
+    if (start < 0)
+        return flags[0] === want ? [Array.from({ length: count + 1 }, (_, index) => index % count)] : [];
+    let run = null;
+    for (let step = 0; step < count; step++) {
+        const index = (start + step) % count;
+        if (flags[index] === want) {
+            if (!run)
+                run = [index];
+            run.push((index + 1) % count);
+        }
+        else if (run) {
+            runs.push(run);
+            run = null;
+        }
+    }
+    if (run)
+        runs.push(run);
+    return runs;
+}
+function extrude(ring, z, height, projection, options = {}) {
+    const convex = options.convex ?? true;
+    const count = ring.length;
+    const counter = signedArea(ring) > 0;
+    const [vx, vy] = towardViewer(projection);
+    const { sinA, cosA } = cameraOf(projection);
+    const normals = ring.map(([ax, ay], index) => {
+        const [bx, by] = ring[(index + 1) % count];
+        const dx = bx - ax;
+        const dy = by - ay;
+        const length = Math.hypot(dx, dy) || 1;
+        return (counter ? [dy / length, -dx / length] : [-dy / length, dx / length]);
+    });
+    const facing = normals.map(([nx, ny]) => nx * vx + ny * vy > 1e-9);
+    const top = ring.map(([x, y]) => iso([x, y, z + height], projection));
+    const bottom = ring.map(([x, y]) => iso([x, y, z], projection));
+    const outline = [];
+    const crease = [];
+    for (const run of runsOf(facing, false))
+        outline.push(pathOf(run.map((index) => top[index])));
+    for (const run of runsOf(facing, true)) {
+        crease.push(pathOf(run.map((index) => top[index])));
+        if (height > 0)
+            outline.push(pathOf(run.map((index) => bottom[index])));
+    }
+    if (height > 0) {
+        for (let index = 0; index < count; index++) {
+            if (facing[(index + count - 1) % count] !== facing[index])
+                outline.push(pathOf([top[index], bottom[index]]));
+        }
+    }
+    let fill;
+    if (convex) {
+        fill = pathOf(convexHull([...top, ...bottom]), true);
+    }
+    else {
+        const parts = [pathOf(oriented(top), true), pathOf(oriented(bottom), true)];
+        for (let index = 0; index < count; index++) {
+            if (!facing[index])
+                continue;
+            const next = (index + 1) % count;
+            parts.push(pathOf(oriented([top[index], top[next], bottom[next], bottom[index]]), true));
+        }
+        fill = parts.join("");
+    }
+    const buckets = Array.from({ length: SHADES }, () => []);
+    if (height > 0) {
+        const [lx, ly] = [-sinA, cosA];
+        for (let index = 0; index < count; index++) {
+            if (!facing[index])
+                continue;
+            const [nx, ny] = normals[index];
+            const lit = (nx * lx + ny * ly + 1) / 2;
+            const shade = Math.min(SHADES - 1, Math.max(0, Math.floor(lit * SHADES)));
+            const next = (index + 1) % count;
+            buckets[shade].push(pathOf(oriented([top[index], top[next], bottom[next], bottom[index]]), true));
+        }
+    }
+    let bevel;
+    if (options.bevel && options.bevel > 0) {
+        const by = options.bevel;
+        const inset = ring.map(([x, y], index) => {
+            const [ax, ay] = normals[(index + count - 1) % count];
+            const [bx, by2] = normals[index];
+            const mx = ax + bx;
+            const my = ay + by2;
+            const length = Math.hypot(mx, my) || 1;
+            return [x - (mx / length) * by, y - (my / length) * by];
+        });
+        const insetTop = inset.map(([x, y]) => iso([x, y, z + height], projection));
+        bevel = runsOf(facing, true)
+            .map((run) => pathOf([top[run[0]], ...run.slice(1, -1).map((index) => insetTop[index]), top[run[run.length - 1]]]))
+            .join("");
+    }
+    return {
+        fill,
+        outline: outline.join(""),
+        crease: crease.join(""),
+        top: pathOf(oriented(top), true),
+        shades: buckets.map((paths) => paths.join("")),
+        bevel,
+    };
+}
+const ringOf = (plan, steps = 8) => roundedPlan(plan, steps);
+function slabOf(plan, z, height, projection, steps = 8, bevel = 0) {
+    return extrude(ringOf(plan, steps), z, height, projection, { convex: true, bevel });
+}
+function circleRing(cx, cy, radius, steps = 40) {
+    return Array.from({ length: steps }, (_, step) => {
+        const angle = (step / steps) * Math.PI * 2;
+        return [cx + radius * Math.cos(angle), cy + radius * Math.sin(angle)];
+    });
+}
+function cylinder(cx, cy, radius, z, height, projection, steps = 32, bevel = 0) {
+    return extrude(circleRing(cx, cy, radius, steps), z, height, projection, { convex: true, bevel });
+}
+const insetPlan = ({ x, y, w, d, r }, by) => ({ x: x + by, y: y + by, w: w - by * 2, d: d - by * 2, r: Math.max(0, r - by) });
+function onTop(points, z, projection, closed = false) {
+    return pathOf(points.map(([x, y]) => iso([x, y, z], projection)), closed);
+}
+const planOutline = (plan, z, projection, steps = 8) => onTop(ringOf(plan, steps), z, projection, true);
+const lineOnTop = (from, to, z, projection) => onTop([from, to], z, projection);
+const segment = (from, to, projection) => pathOf([iso(from, projection), iso(to, projection)]);
+const rise = (at, from, to, projection) => segment([at[0], at[1], from], [at[0], at[1], to], projection);
+const ring = (cx, cy, radius, z, projection, steps = 40) => onTop(circleRing(cx, cy, radius, steps), z, projection, true);
+const pointsAt = (points, projection) => points.map((point) => iso(point, projection));
+function dotGrid(x, y, columns, rows, gap, z, projection) {
+    const dots = [];
+    for (let row = 0; row < rows; row++) {
+        for (let column = 0; column < columns; column++)
+            dots.push(iso([x + column * gap, y + row * gap, z], projection));
+    }
+    return dots;
+}
+function corners({ x, y, w, d }, inset = 0) {
+    return [
+        [x + inset, y + inset],
+        [x + w - inset, y + inset],
+        [x + inset, y + d - inset],
+        [x + w - inset, y + d - inset],
+    ];
+}
+function boxCorners({ x, y, w, d }, z0, z1) {
+    const out = [];
+    for (const px of [x, x + w])
+        for (const py of [y, y + d])
+            for (const z of [z0, z1])
+                out.push([px, py, z]);
+    return out;
+}
+function knurl(cx, cy, radius, z0, z1, count, projection, inset = 0.4) {
+    const [vx, vy] = towardViewer(projection);
+    const lines = [];
+    for (let index = 0; index < count; index++) {
+        const angle = (index / count) * Math.PI * 2;
+        const nx = Math.cos(angle);
+        const ny = Math.sin(angle);
+        if (nx * vx + ny * vy < 0.15)
+            continue;
+        lines.push(segment([cx + radius * nx, cy + radius * ny, z0 + inset], [cx + radius * nx, cy + radius * ny, z1 - inset], projection));
+    }
+    return lines.join("");
+}
+function sideArc(cx, cy, radius, z, projection, steps = 24) {
+    const [vx, vy] = towardViewer(projection);
+    const facing = Math.atan2(vy, vx);
+    const points = [];
+    for (let step = 0; step <= steps; step++) {
+        const angle = facing - Math.PI / 2 + (step / steps) * Math.PI;
+        points.push(iso([cx + radius * Math.cos(angle), cy + radius * Math.sin(angle), z], projection));
+    }
+    return pathOf(points);
+}
+function ringSeam(ring, z, projection) {
+    const count = ring.length;
+    const counter = signedArea(ring) > 0;
+    const [vx, vy] = towardViewer(projection);
+    const facing = ring.map(([ax, ay], index) => {
+        const [bx, by] = ring[(index + 1) % count];
+        const dx = bx - ax;
+        const dy = by - ay;
+        const [nx, ny] = counter ? [dy, -dx] : [-dy, dx];
+        return nx * vx + ny * vy > 1e-9;
+    });
+    return runsOf(facing, true).map((run) => pathOf(run.map((index) => iso([ring[index][0], ring[index][1], z], projection)))).join("");
+}
+const sideSeam = (plan, z, projection, steps = 8) => ringSeam(ringOf(plan, steps), z, projection);
+function sideRing(center, radius, axis, projection, steps = 20) {
+    const [px, py, pz] = center;
+    const points = [];
+    for (let step = 0; step < steps; step++) {
+        const angle = (step / steps) * Math.PI * 2;
+        const u = radius * Math.cos(angle);
+        const v = radius * Math.sin(angle);
+        points.push(iso(axis === "x" ? [px, py + u, pz + v] : [px + u, py, pz + v], projection));
+    }
+    return pathOf(points, true);
+}
+function coil(from, to, center, radius, turns, axis, projection, perTurn = 16) {
+    const count = Math.max(1, Math.round(turns * perTurn));
+    const back = [];
+    const front = [];
+    let run = [];
+    let near = null;
+    for (let index = 0; index <= count; index++) {
+        const share = index / count;
+        const angle = share * turns * Math.PI * 2;
+        const u = radius * Math.cos(angle);
+        const v = radius * Math.sin(angle);
+        const along = from + (to - from) * share;
+        const point = axis === "x" ? [along, center[0] + u, center[1] + v] : [center[0] + u, along, center[1] + v];
+        const normal = axis === "x" ? [0, Math.cos(angle), Math.sin(angle)] : [Math.cos(angle), 0, Math.sin(angle)];
+        const facing = depthOf(normal, projection) > 0;
+        const flat = iso(point, projection);
+        if (near === null)
+            near = facing;
+        if (facing !== near) {
+            run.push(flat);
+            (near ? front : back).push(pathOf(run));
+            run = [flat];
+            near = facing;
+            continue;
+        }
+        run.push(flat);
+    }
+    if (run.length > 1)
+        (near ? front : back).push(pathOf(run));
+    return { back: back.join(""), front: front.join("") };
+}
+function topTicks(from, to, step, every, edge, z, lengths, projection, axis = "x") {
+    const minor = [];
+    const major = [];
+    const first = Math.ceil(from / step) * step;
+    for (let at = first, index = Math.round(first / step); at <= to + 1e-9; at += step, index++) {
+        const big = index % every === 0;
+        const length = big ? lengths[1] : lengths[0];
+        const a = axis === "x" ? [at, edge] : [edge, at];
+        const b = axis === "x" ? [at, edge + length] : [edge + length, at];
+        (big ? major : minor).push(lineOnTop(a, b, z, projection));
+    }
+    return { minor: minor.join(""), major: major.join("") };
+}
+function sideTicks(from, to, step, every, face, top, lengths, projection, axis = "x") {
+    const minor = [];
+    const major = [];
+    const first = Math.ceil(from / step) * step;
+    for (let at = first, index = Math.round(first / step); at <= to + 1e-9; at += step, index++) {
+        const big = index % every === 0;
+        const length = big ? lengths[1] : lengths[0];
+        const a = axis === "x" ? [at, face, top] : [face, at, top];
+        const b = axis === "x" ? [at, face, top - length] : [face, at, top - length];
+        (big ? major : minor).push(segment(a, b, projection));
+    }
+    return { minor: minor.join(""), major: major.join("") };
+}
+function radialTicks(cx, cy, radius, count, every, z, lengths, projection, from = 0, span = Math.PI * 2) {
+    const minor = [];
+    const major = [];
+    const closed = Math.abs(span - Math.PI * 2) < 1e-9;
+    const steps = closed ? count : count + 1;
+    for (let index = 0; index < steps; index++) {
+        const angle = from + (index / count) * span;
+        const big = index % every === 0;
+        const inner = radius - (big ? lengths[1] : lengths[0]);
+        const sx = Math.sin(angle);
+        const sy = -Math.cos(angle);
+        (big ? major : minor).push(lineOnTop([cx + sx * inner, cy + sy * inner], [cx + sx * radius, cy + sy * radius], z, projection));
+    }
+    return { minor: minor.join(""), major: major.join("") };
+}
+const haloOf = (plan, z, height, projection) => slabOf(plan, z, height, projection).fill;
+function axisVector(projection, [dx, dy, dz]) {
+    const origin = iso([0, 0, 0], projection);
+    const moved = iso([dx, dy, dz], projection);
+    return [moved[0] - origin[0], moved[1] - origin[1]];
+}
+const fine = (value) => Math.round(value * 100) / 100;
+function translateAlong(projection, by) {
+    const [x, y] = axisVector(projection, by);
+    return `translate(${fine(x)} ${fine(y)})`;
+}
+const thousandth = (value) => Math.round(value * 1000) / 1000;
+function axesAt(at, z, projection) {
+    const origin = iso([at[0], at[1], z], projection);
+    const along = (point) => {
+        const [px, py] = iso(point, projection);
+        return [px - origin[0], py - origin[1]];
+    };
+    return { origin, x: along([at[0] + 1, at[1], z]), y: along([at[0], at[1] + 1, z]), z: along([at[0], at[1], z + 1]) };
+}
+const matrixOf = (u, v, origin) => `matrix(${thousandth(u[0])} ${thousandth(u[1])} ${thousandth(v[0])} ${thousandth(v[1])} ${thousandth(origin[0])} ${thousandth(origin[1])})`;
+function holdStill(element, [dx, dy]) {
+    const text = dx || dy ? `translate(${-dx} ${-dy})` : "";
+    element.querySelectorAll("[data-hold]").forEach((node) => (text ? node.setAttribute("transform", text) : node.removeAttribute("transform")));
+}
+function topMatrix(at, z, projection, along = "x") {
+    const { origin, x, y } = axesAt(at, z, projection);
+    return along === "x" ? matrixOf(x, y, origin) : matrixOf([-y[0], -y[1]], x, origin);
+}
+function sideMatrix(at, z, projection, face) {
+    const { origin, x, y, z: up } = axesAt(at, z, projection);
+    const down = [-up[0], -up[1]];
+    return face === "left" ? matrixOf(x, down, origin) : matrixOf([-y[0], -y[1]], down, origin);
+}
+function screenRise(height, projection) {
+    const { cosE, k } = cameraOf(projection);
+    return height * cosE * k;
+}
+function fitProjection(points, width, height, { pad = 24, headroom = 0, azimuth = AZIMUTH, elevation = ELEVATION } = {}) {
+    const unit = { origin: [0, 0], scale: 1, azimuth, elevation };
+    const flat = points.map((point) => iso(point, unit));
+    const xs = flat.map(([x]) => x);
+    const ys = flat.map(([, y]) => y);
+    const left = Math.min(...xs);
+    const right = Math.max(...xs);
+    const up = Math.min(...ys);
+    const down = Math.max(...ys);
+    const scale = Math.min((width - pad * 2) / (right - left), (height - pad * 2 - headroom) / (down - up));
+    return {
+        origin: [width / 2 - ((left + right) / 2) * scale, headroom + (height - headroom) / 2 - ((up + down) / 2) * scale],
+        scale,
+        azimuth,
+        elevation,
+    };
+}
+const escape = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const attrs = (pairs) => Object.entries(pairs)
+    .filter(([, value]) => value !== undefined && value !== false)
+    .map(([key, value]) => ` ${key}="${escape(String(value))}"`)
+    .join("");
+function solidSvg(paths, { tone = "hi", crease = "faint", halo = false, lit = false, flat = false, className, inner = "" } = {}) {
+    const parts = [];
+    if (halo)
+        parts.push(`<path class="iso-halo" d="${paths.fill}"/>`);
+    parts.push(`<path class="iso-fill" d="${paths.fill}"/>`);
+    if (!flat) {
+        paths.shades.forEach((d, shade) => {
+            if (d)
+                parts.push(`<path class="iso-shade" data-shade="${shade}" d="${d}"/>`);
+        });
+        parts.push(`<path class="iso-top" d="${paths.top}"/>`);
+    }
+    if (crease !== "none" && paths.crease)
+        parts.push(`<path class="iso-line iso-crease" data-tone="${crease}" d="${paths.crease}"/>`);
+    if (crease !== "none" && paths.bevel)
+        parts.push(`<path class="iso-line iso-bevel" data-tone="${crease}" d="${paths.bevel}"/>`);
+    if (inner)
+        parts.push(inner);
+    parts.push(`<path class="iso-line iso-edge" data-tone="${tone}" d="${paths.outline}"/>`);
+    return `<g${attrs({ class: className ? `iso-solid ${className}` : "iso-solid", "data-lit": lit ? "" : undefined, "data-seamless": paths.seamless ? "" : undefined })}>${parts.join("")}</g>`;
+}
+function lineSvg(d, { tone = "lo", dotted = false, dashed = false, flow = false, className, free } = {}) {
+    if (!d)
+        return "";
+    return `<path${attrs({
+        class: className ? `iso-line ${className}` : "iso-line",
+        "data-tone": tone,
+        "data-free": free === true ? "" : free || undefined,
+        "data-dotted": dotted ? "" : undefined,
+        "data-dashed": dashed ? "" : undefined,
+        "data-flow": flow ? "" : undefined,
+        d,
+    })}/>`;
+}
+function dotsSvg(points, { size = 0.5, tone = "mid", pulse = false } = {}) {
+    const dots = points
+        .map(([x, y, alpha], index) => `<circle cx="${tenth(x)}" cy="${tenth(y)}" r="${size}"${alpha !== undefined && alpha < 1 ? ` fill-opacity="${Math.max(0, alpha).toFixed(2)}"` : ""}${pulse ? ` data-pulse="" style="--pulse-at:${(index * 137) % 1600}ms"` : ""}/>`)
+        .join("");
+    return `<g class="iso-dots" data-tone="${tone}">${dots}</g>`;
+}
+function fadedSvg(list, style = {}) {
+    const groups = new Map();
+    for (const entry of list) {
+        const [d, alpha] = Array.isArray(entry) ? entry : [entry.d, entry.alpha];
+        if (!d || !(alpha > 0.02))
+            continue;
+        const level = Math.min(1, Math.round(alpha * 20) / 20);
+        groups.set(level, (groups.get(level) ?? "") + d);
+    }
+    return [...groups].map(([alpha, d]) => (alpha >= 1 ? lineSvg(d, style) : `<g opacity="${alpha.toFixed(2)}">${lineSvg(d, style)}</g>`)).join("");
+}
+function fadeLineSvg(points, { fade = [0, 0], tone = "lo", className, stops = 6 } = {}) {
+    if (points.length < 2)
+        return "";
+    const ease = (t) => t * t * (3 - 2 * t);
+    const hashOf = (text) => {
+        let hash = 2166136261;
+        for (let index = 0; index < text.length; index++)
+            hash = Math.imul(hash ^ text.charCodeAt(index), 16777619);
+        return (hash >>> 0).toString(36);
+    };
+    const lengths = [0];
+    for (let index = 1; index < points.length; index++)
+        lengths.push(lengths[index - 1] + Math.hypot(points[index][0] - points[index - 1][0], points[index][1] - points[index - 1][1]));
+    const at = (length) => {
+        let index = 1;
+        while (index < points.length - 1 && lengths[index] < length)
+            index++;
+        const span = lengths[index] - lengths[index - 1] || 1;
+        const t = Math.max(0, Math.min(1, (length - lengths[index - 1]) / span));
+        return [points[index - 1][0] + (points[index][0] - points[index - 1][0]) * t, points[index - 1][1] + (points[index][1] - points[index - 1][1]) * t];
+    };
+    const pieceOf = (from, to) => [at(from), ...points.filter((_, index) => lengths[index] > from + 1e-6 && lengths[index] < to - 1e-6), at(to)];
+    const total = lengths[lengths.length - 1];
+    if (total < 1e-6)
+        return "";
+    let [start, end] = Array.isArray(fade) ? fade : [fade, fade];
+    if (start + end > total) {
+        const share = total / (start + end);
+        start *= share;
+        end *= share;
+    }
+    const paint = `var(--anatomy-${tone})`;
+    const ramp = (piece, rising) => {
+        const d = pathOf(piece);
+        const [x1, y1] = piece[0];
+        const [x2, y2] = piece[piece.length - 1];
+        const id = `iso-fade-${hashOf(`${d}|${tone}|${rising}`)}`;
+        const marks = Array.from({ length: stops + 1 }, (_, index) => {
+            const t = index / stops;
+            const alpha = ease(rising ? t : 1 - t);
+            return `<stop offset="${t.toFixed(3)}" stop-opacity="${alpha.toFixed(3)}" style="stop-color:${paint}"/>`;
+        }).join("");
+        const gradient = `<linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="${tenth(x1)}" y1="${tenth(y1)}" x2="${tenth(x2)}" y2="${tenth(y2)}">${marks}</linearGradient>`;
+        return `<defs>${gradient}</defs><path${attrs({ class: className ? `iso-line ${className}` : "iso-line", "data-tone": tone, "data-free": rising ? "start" : "end", d, style: `stroke:url(#${id})` })}/>`;
+    };
+    const parts = [];
+    if (start > 0.05)
+        parts.push(ramp(pieceOf(0, start), true));
+    if (total - end - start > 0.05)
+        parts.push(lineSvg(pathOf(pieceOf(start, total - end)), { tone, className }));
+    if (end > 0.05)
+        parts.push(ramp(pieceOf(total - end, total), false));
+    return `<g class="iso-fade">${parts.join("")}</g>`;
+}
+function wireSvg(from, to, { via = [], tone = "lo", dotted = false, dashed = false, flow = false, ends = "both", size = 1.2 } = {}) {
+    const d = pathOf([from, ...via, to]);
+    const end = ([x, y]) => `<circle class="iso-wire-end" cx="${tenth(x)}" cy="${tenth(y)}" r="${size}"/>`;
+    return `<g class="iso-wire" data-tone="${tone}">${lineSvg(d, { tone, dotted, dashed, flow })}${ends === "both" || ends === "from" ? end(from) : ""}${ends === "both" || ends === "to" ? end(to) : ""}</g>`;
+}
+function faceTextSvg(transform, text, { size = 3, tone = "mid", anchor = "start" } = {}) {
+    return `<text class="iso-face-text" data-tone="${tone}" transform="${transform}" font-size="${size}" text-anchor="${anchor}">${escape(text)}</text>`;
+}
+function groupSvg(children, extra = {}) {
+    return `<g${attrs(extra)}>${Array.isArray(children) ? children.join("") : children}</g>`;
+}
+function figureSvg({ width, height, label, body, standalone = false, className }) {
+    const style = standalone ? `<style>${ISO_CSS}</style>` : "";
+    return `<svg${attrs({
+        xmlns: "http://www.w3.org/2000/svg",
+        class: `iso-svg${standalone ? " iso" : ""}${className ? ` ${className}` : ""}`,
+        "data-theme": standalone || undefined,
+        viewBox: `0 0 ${width} ${height}`,
+        role: "img",
+        "aria-label": label,
+    })}>${style}${Array.isArray(body) ? body.join("") : body}</svg>`;
+}
+function swatchSvg(mark) {
+    if (mark === "raised" || mark === "flat" || mark === "lit") {
+        const body = mark === "flat" ? "M2 6.5 8 3.5 14 6.5 8 9.5Z" : "M2 4.5 8 1.5 14 4.5 14 6 8 9 2 6Z";
+        const crease = mark === "flat" ? "" : `<path class="iso-swatch-crease" d="M2 4.5 8 7.5 14 4.5"/>`;
+        return `<svg class="iso-swatch" data-mark="${mark}" viewBox="0 0 16 10" aria-hidden="true"><path d="${body}"/>${crease}</svg>`;
+    }
+    return `<svg class="iso-swatch" data-mark="${mark}" viewBox="0 0 16 10" aria-hidden="true"><path d="M1.5 5h13"/></svg>`;
+}
+function plateHtml({ fig, title, hint, readout = "", keys = [], caption, body }) {
+    const corner = (name, text, extra = "") => `<span class="iso-plate-corner" data-corner="${name}"${extra}>${escape(text)}</span>`;
+    const legend = keys.length || caption
+        ? `<figcaption class="iso-legend">${keys.length ? `<span class="iso-keys">${keys.map((key) => `<span class="iso-key">${swatchSvg(key.mark)}${escape(key.label)}</span>`).join("")}</span>` : ""}${caption ? `<span class="iso-caption">${escape(caption)}</span>` : ""}</figcaption>`
+        : "";
+    return `<figure class="iso-figure"><div class="iso-plate"><div class="iso-plate-corners" aria-hidden="true">${corner("fig", fig)}${title ? corner("title", title) : ""}${hint ? corner("hint", hint) : ""}${corner("readout", readout, " data-readout")}</div>${body}</div>${legend}</figure>`;
+}
+function pageHtml({ title, theme = "dark", body, script = "", width = 650 }) {
+    return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escape(title)}</title><style>${ISO_CSS}${PAGE_CSS.replace("__WIDTH__", String(width))}</style></head><body class="iso" data-theme="${theme}"><main class="iso-page">${body}</main>${script ? `<script type="module">${script.replace(/<\/(script)/gi, "<\\/$1")}<\/script>` : ""}</body></html>`;
+}
+const PAGE_CSS = `
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body[data-theme="light"]{color-scheme:light}
+body{margin:0;background:var(--anatomy-page);color:var(--anatomy-text);font:14px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.iso-page{width:min(__WIDTH__px,100% - 32px);margin:64px auto 96px}
+`;
+const ISO_CSS = `
+.iso{
+  --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
+  --anatomy-paper:#131313;--anatomy-face:#1b1b1b;--anatomy-top:#1c1c1c;
+  --anatomy-shade-0:#0f0f0f;--anatomy-shade-1:#121212;--anatomy-shade-2:#151515;--anatomy-shade-3:#181818;
+  --anatomy-lit-top:#262626;--anatomy-lit-shade:#1d1d1d;
+  --anatomy-hi:#d4d4d4;--anatomy-mid:#6a6a6a;--anatomy-lo:#3e3e3e;--anatomy-faint:#2a2a2a;--anatomy-lit:#ffffff;
+  --anatomy-halo:#050505;--anatomy-halo-opacity:.9;--anatomy-dot:#e6e6e6;
+  --anatomy-red:#ff6b6b;--anatomy-green:#6be0a0;--anatomy-blue:#6b9bff;
+  --anatomy-weight:.6px;--anatomy-ease:cubic-bezier(.32,.72,0,1);
+  --anatomy-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --anatomy-lift:inset 0 1px 0 0 #ffffff0a,inset 0 0 0 1px #ffffff06,0 0 0 1px #00000026,0 1px 1px -.5px #00000014,0 3px 3px -1.5px #00000014,0 6px 6px -3px #00000014,0 12px 12px -6px #00000014;
+}
+.iso[data-theme="light"]{
+  --anatomy-page:#f2f2ef;--anatomy-card:#fbfbfa;--anatomy-text:#57575a;--anatomy-strong:#18181a;--anatomy-muted:#8c8c90;
+  --anatomy-paper:#fbfbfa;--anatomy-face:#ffffff;--anatomy-top:#ffffff;
+  --anatomy-shade-0:#dcdcd9;--anatomy-shade-1:#e5e5e2;--anatomy-shade-2:#ededea;--anatomy-shade-3:#f4f4f1;
+  --anatomy-lit-top:#ffffff;--anatomy-lit-shade:#eeeeeb;
+  --anatomy-hi:#26262a;--anatomy-mid:#8a8a8f;--anatomy-lo:#b4b4b8;--anatomy-faint:#d4d4d6;--anatomy-lit:#000000;
+  --anatomy-halo:#8a8a80;--anatomy-halo-opacity:.32;--anatomy-dot:#3a3a3e;
+  --anatomy-red:#e5484d;--anatomy-green:#30a46c;--anatomy-blue:#3e63dd;
+  --anatomy-lift:inset 0 1px 0 0 #ffffff,0 0 0 1px #0000000f,0 1px 1px -.5px #0000000a,0 3px 3px -1.5px #0000000a,0 6px 6px -3px #0000000a,0 12px 12px -6px #0000000a;
+}
+.iso-svg{display:block;width:100%;height:auto;overflow:visible}
+.iso-svg path,.iso-svg circle{vector-effect:non-scaling-stroke}
+.iso-fill{fill:var(--anatomy-paper);stroke:none}
+.iso-solid[data-lit]>.iso-fill{fill:var(--anatomy-face)}
+.iso-shade,.iso-top{stroke:none}
+.iso-shade[data-shade="0"]{fill:var(--anatomy-shade-0)}
+.iso-shade[data-shade="1"]{fill:var(--anatomy-shade-1)}
+.iso-shade[data-shade="2"]{fill:var(--anatomy-shade-2)}
+.iso-shade[data-shade="3"]{fill:var(--anatomy-shade-3)}
+.iso-top{fill:var(--anatomy-top)}
+.iso-solid[data-lit]>.iso-top{fill:var(--anatomy-lit-top)}
+.iso-solid[data-lit]>.iso-shade{fill:var(--anatomy-lit-shade)}
+.iso-solid[data-seamless]>.iso-shade,.iso-solid[data-seamless]>.iso-top{stroke-width:.4;stroke-linejoin:round}
+.iso-solid[data-seamless]>.iso-shade[data-shade="0"]{stroke:var(--anatomy-shade-0)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="1"]{stroke:var(--anatomy-shade-1)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="2"]{stroke:var(--anatomy-shade-2)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="3"]{stroke:var(--anatomy-shade-3)}
+.iso-solid[data-seamless]>.iso-top{stroke:var(--anatomy-top)}
+.iso-solid[data-seamless][data-lit]>.iso-top{stroke:var(--anatomy-lit-top)}
+.iso-solid[data-seamless][data-lit]>.iso-shade{stroke:var(--anatomy-lit-shade)}
+.iso-solid[data-lit]>.iso-edge{stroke:var(--anatomy-lit)}
+.iso-halo{fill:var(--anatomy-halo);stroke:none;filter:blur(9px);opacity:var(--anatomy-halo-opacity);transform:translateY(3px)}
+.iso-line{fill:none;stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight);stroke-linecap:round;stroke-linejoin:round}
+.iso-line[data-tone="hi"]{stroke:var(--anatomy-hi)}
+.iso-line[data-tone="mid"]{stroke:var(--anatomy-mid)}
+.iso-line[data-tone="lo"]{stroke:var(--anatomy-lo)}
+.iso-line[data-tone="faint"]{stroke:var(--anatomy-faint)}
+.iso-line[data-tone="lit"]{stroke:var(--anatomy-lit)}
+.iso-line[data-tone="red"]{stroke:var(--anatomy-red)}
+.iso-line[data-tone="green"]{stroke:var(--anatomy-green)}
+.iso-line[data-tone="blue"]{stroke:var(--anatomy-blue)}
+.iso-line[data-dotted]{stroke-dasharray:.01 3.5;stroke-width:1}
+.iso-line[data-dashed]{stroke-dasharray:3 3}
+.iso-line[data-flow]{stroke-dasharray:2 6}
+.iso-wire-end{fill:var(--anatomy-paper);stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight)}
+.iso-wire[data-tone="hi"] .iso-wire-end{stroke:var(--anatomy-hi)}
+.iso-wire[data-tone="mid"] .iso-wire-end{stroke:var(--anatomy-mid)}
+.iso-wire[data-tone="faint"] .iso-wire-end{stroke:var(--anatomy-faint)}
+.iso-wire[data-tone="lit"] .iso-wire-end{stroke:var(--anatomy-lit)}
+.iso-dots circle{fill:var(--anatomy-dot);stroke:none;opacity:.32}
+.iso-dots[data-tone="hi"] circle{opacity:.85}
+.iso-dots[data-tone="mid"] circle{opacity:.45}
+.iso-dots[data-tone="lo"] circle{opacity:.22}
+.iso-dots[data-tone="faint"] circle{opacity:.12}
+.iso-face-text{fill:var(--anatomy-mid);font-family:var(--anatomy-mono);letter-spacing:.04em}
+.iso-face-text[data-tone="hi"]{fill:var(--anatomy-hi)}
+.iso-face-text[data-tone="lo"]{fill:var(--anatomy-lo)}
+.iso-face-text[data-tone="faint"]{fill:var(--anatomy-faint)}
+.tb-body{fill:var(--anatomy-shade-2);stroke:none}
+.tb-shine{fill:var(--anatomy-top);stroke:none}
+.tb-shade{fill:var(--anatomy-shade-0);stroke:none}
+.tb-ring{fill:none;stroke:var(--anatomy-lo);stroke-width:.45;stroke-linecap:butt;stroke-linejoin:round}
+.tb-ring[data-tone="mid"]{stroke:var(--anatomy-mid)}
+.tb-ring[data-tone="faint"]{stroke:var(--anatomy-faint)}
+.tb-ring[data-tone="hi"]{stroke:var(--anatomy-hi)}
+@keyframes iso-flow{to{stroke-dashoffset:-32}}
+@keyframes iso-pulse{0%,100%{opacity:.18}12%{opacity:1}40%{opacity:.18}}
+.iso-line[data-flow]{animation:iso-flow 1600ms linear infinite}
+.iso-dots circle[data-pulse]{animation:iso-pulse 1600ms steps(1,end) infinite;animation-delay:var(--pulse-at,0ms)}
+.iso-figure{margin:32px 0 36px}
+.iso-plate{position:relative;padding:52px 24px;border-radius:0;background:var(--anatomy-card);box-shadow:0 0 0 1px var(--anatomy-mid);--anatomy-paper:var(--anatomy-card)}
+.iso-plate-corners{position:absolute;inset:18px 20px;pointer-events:none}
+.iso-plate-corner{position:absolute;color:var(--anatomy-muted);font-family:var(--anatomy-mono);font-size:10.5px;line-height:1;letter-spacing:.04em;white-space:nowrap}
+.iso-plate-corner[data-corner="fig"]{top:0;left:0;color:var(--anatomy-text)}
+.iso-plate-corner[data-corner="title"]{top:0;right:0;text-transform:uppercase;letter-spacing:.1em}
+.iso-plate-corner[data-corner="hint"]{bottom:0;left:0;text-transform:uppercase;letter-spacing:.1em}
+.iso-plate-corner[data-corner="readout"]{right:0;bottom:0;color:var(--anatomy-text);font-variant-numeric:tabular-nums}
+.iso-plate .iso-svg{margin:0 auto}
+.iso-legend{display:grid;gap:8px;margin-top:12px;color:var(--anatomy-muted);font-size:13px;line-height:1.55}
+.iso-keys{display:flex;flex-wrap:wrap;gap:6px 18px}
+.iso-key{display:inline-flex;align-items:center;gap:7px}
+.iso-swatch{width:16px;height:10px;flex:none;overflow:visible}
+.iso-swatch path{fill:none;stroke:var(--anatomy-hi);stroke-width:1;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+.iso-swatch[data-mark="raised"] path,.iso-swatch[data-mark="flat"] path{stroke:var(--anatomy-mid)}
+.iso-swatch[data-mark="lit"] path{stroke:var(--anatomy-lit)}
+.iso-swatch[data-mark="dim"] path{stroke:var(--anatomy-lo)}
+.iso-swatch[data-mark="dotted"] path{stroke-dasharray:.01 3;stroke-width:1.4}
+.iso-swatch[data-mark="dashed"] path{stroke-dasharray:3 2.5}
+.iso-swatch[data-mark="red"] path{stroke:var(--anatomy-red)}
+.iso-swatch[data-mark="green"] path{stroke:var(--anatomy-green)}
+.iso-swatch[data-mark="blue"] path{stroke:var(--anatomy-blue)}
+.iso-swatch-crease{stroke:var(--anatomy-lo)!important}
+@media (max-width:560px){.iso-plate{padding:48px 12px 70px}.iso-plate-corner[data-corner="hint"]{bottom:18px}}
+@media (prefers-reduced-motion:reduce){.iso-line[data-flow],.iso-dots circle[data-pulse]{animation:none}}
+`;
+
+return { iso, depthOf, fitProjection, slabOf, cylinder, haloOf, planOutline, insetPlan, corners, boxCorners, ring, dotsSvg, solidSvg, lineSvg, knurl, radialTicks, onTop, lineOnTop, faceTextSvg, topMatrix };
+})();
+
+// Lesson content and the machine each lesson's code drives.
+// Uses `k` (the repo's iso kit) and helpers from figures.js.
+
+const LESSONS = [
+  {
+    id: "variables",
+    minutes: 8,
+    title: "A variable is a labelled box",
+    idea: "You put a value in the box, then use the label to get it back. Each box below holds a block exactly as tall as its number.",
+    code: `# A variable is a labelled box.
+first_block = 18
+per_turn = 20
+
+print(first_block)
+print("One turn is", per_turn, "px")
+`,
+    challenge: "Make the first block taller: change 18 to 30, then press Run.",
+    hint: "Find the line first_block = 18 and change only the number.",
+    answer: `first_block = 30
+per_turn = 20
+
+print(first_block)
+print("One turn is", per_turn, "px")
+`,
+    win: "The block grew because the box changed. That's what a variable is.",
+    repo: "examples/dial-indicator/build.mjs, line 28: const PER_TURN = 20;",
+    plateTitle: "Two labelled boxes",
+    hintCorner: "Edit the numbers, then Run",
+    read: (g) => ({ first_block: g.first_block, per_turn: g.per_turn }),
+    check: (s) => isNum(s.first_block) && s.first_block !== 18,
+    readout: (s) => `first_block = ${show(s.first_block)} · per_turn = ${show(s.per_turn)}`,
+    figure: () => figVariables(),
+  },
+  {
+    id: "math",
+    minutes: 8,
+    title: "Python does the math",
+    idea: "The block's height decides how far the needle turns. One full turn of the dial is 20 px of travel, so the needle turns by height ÷ 20.",
+    code: `per_turn = 20      # one full needle turn = 20 px
+block = 18         # the block under the gauge
+
+turns = block / per_turn
+degrees = turns * 360
+
+print("turns:", turns)
+print("degrees:", degrees)
+`,
+    challenge: "Make the needle point at exactly half a turn (180°). Change only one number.",
+    hint: "Half of 20 is 10. Which variable holds the block's height?",
+    answer: `per_turn = 20
+block = 10
+
+turns = block / per_turn
+degrees = turns * 360
+
+print("turns:", turns)
+print("degrees:", degrees)
+`,
+    win: "You predicted the needle with math. The figure does the same calculation.",
+    repo: "build.mjs, line 179: needleAt(BLOCKS[0] / PER_TURN), the same division.",
+    plateTitle: "Height → needle",
+    hintCorner: "Blue arc = how far it turned",
+    read: (g) => ({ block: g.block, per_turn: g.per_turn, turns: g.turns, degrees: g.degrees }),
+    check: (s) => isNum(s.turns) && Math.abs(s.turns - 0.5) < 1e-9,
+    readout: (s) => (isNum(s.turns) ? `${fmt(s.turns, 2)} turn · ${fmt(s.degrees, 1)}°` : "no turns yet"),
+    figure: () => figMath(),
+  },
+  {
+    id: "lists",
+    minutes: 10,
+    title: "A list holds many values in order",
+    idea: "Python counts positions from 0, people count from 1. So block 1 lives at blocks[0].",
+    code: `blocks = [18, 14, 10]
+
+print("how many:", len(blocks))
+print("first:", blocks[0])
+print("last:", blocks[2])
+`,
+    challenge: "Put 5 blocks on the carriage by adding two more numbers to the list.",
+    hint: "Numbers in a list are separated by commas: [18, 14, 10, 8, 6]",
+    answer: `blocks = [18, 14, 10, 8, 6]
+
+print("how many:", len(blocks))
+print("first:", blocks[0])
+print("last:", blocks[4])
+`,
+    win: "Five blocks, positions 0 to 4. Try print(blocks[5]) to see what an IndexError looks like.",
+    repo: "build.mjs, line 35: const BLOCKS = [18, 14, 10];",
+    plateTitle: "blocks = [ … ]",
+    hintCorner: "Red label = position 0",
+    read: (g) => ({ blocks: g.blocks }),
+    check: (s) => Array.isArray(s.blocks) && s.blocks.length === 5 && s.blocks.every(isNum),
+    readout: (s) => (Array.isArray(s.blocks) ? `len(blocks) = ${s.blocks.length}` : "no list yet"),
+    figure: () => figList(false),
+  },
+  {
+    id: "loops",
+    minutes: 10,
+    title: "A loop repeats work for every item",
+    idea: "Write the steps once. Python visits each block in turn, and the indented line runs on every pass.",
+    code: `blocks = [18, 14, 10]
+
+for height in blocks:
+    print(f"reads {height:.1f} px")
+`,
+    challenge: "Add a 4th block to the list. Don't add any print lines; let the loop do the work.",
+    hint: "Only the first line needs to change: add , 6 before the ].",
+    answer: `blocks = [18, 14, 10, 6]
+
+for height in blocks:
+    print(f"reads {height:.1f} px")
+`,
+    win: "The output grew by itself. The loop did the copy-paste for you.",
+    repo: "build.mjs, line 122: BLOCKS.forEach(...), JavaScript's version of a for loop.",
+    plateTitle: "for height in blocks",
+    hintCorner: "Watch each pass",
+    read: (g) => ({ blocks: g.blocks }),
+    check: (s, out) => Array.isArray(s.blocks) && s.blocks.length >= 4 && countLines(out, "reads") === s.blocks.length,
+    readout: (s) => (Array.isArray(s.blocks) ? `${s.blocks.length} blocks → ${s.blocks.length} passes` : "no list yet"),
+    figure: () => figList(true),
+  },
+  {
+    id: "if-else",
+    minutes: 10,
+    title: "if / else makes decisions",
+    idea: "Is there a block under the gauge? If yes, read it. If no, say so. The carriage slides to whatever choice you pick.",
+    code: `blocks = [18, 14, 10]
+choice = 2          # which block goes under the gauge
+
+if 1 <= choice <= len(blocks):
+    height = blocks[choice - 1]
+    print(f"block {choice} · reads {height:.1f} px")
+else:
+    print("between blocks")
+`,
+    challenge: "Make Python take the else path: pick a choice that has no block.",
+    hint: "There are only 3 blocks. What happens with choice = 7? Or 0?",
+    answer: `blocks = [18, 14, 10]
+choice = 7
+
+if 1 <= choice <= len(blocks):
+    height = blocks[choice - 1]
+    print(f"block {choice} · reads {height:.1f} px")
+else:
+    print("between blocks")
+`,
+    win: "You steered the program down the other path. Every app is full of these forks.",
+    repo: 'build.mjs, line 216: index < 0 ? "between blocks" : "block " + (index + 1)',
+    plateTitle: "Block or no block?",
+    hintCorner: "Change choice, then Run",
+    read: (g) => ({ blocks: g.blocks, choice: g.choice }),
+    check: (s, out) => /between blocks/.test(out),
+    readout: (s) => gaugeText(s.blocks, s.choice),
+    figure: () => figGauge("if"),
+  },
+  {
+    id: "functions",
+    minutes: 12,
+    title: "A function is a machine you build",
+    idea: "def builds the machine once. Feed it an input and it hands back an answer. Press the number buttons under the figure to feed your machine.",
+    code: `BLOCKS = [18, 14, 10]
+
+def readout(choice):
+    if 1 <= choice <= len(BLOCKS):
+        height = BLOCKS[choice - 1]
+        return f"block {choice} · reads {height:.1f} px"
+    return "between blocks"
+
+print(readout(2))
+
+# Your turn: make this machine return the needle angle.
+def needle_degrees(choice):
+    return 0
+`,
+    challenge: "Fix needle_degrees so it returns BLOCKS[choice - 1] / 20 * 360. The dial will follow.",
+    hint: "Replace return 0 with the formula. Keep the 4 spaces in front of return.",
+    answer: `BLOCKS = [18, 14, 10]
+
+def readout(choice):
+    if 1 <= choice <= len(BLOCKS):
+        height = BLOCKS[choice - 1]
+        return f"block {choice} · reads {height:.1f} px"
+    return "between blocks"
+
+print(readout(2))
+
+def needle_degrees(choice):
+    return BLOCKS[choice - 1] / 20 * 360
+`,
+    win: "You built your own function, and the figure is now calling your code.",
+    repo: "The repo's rule: every number in a figure comes from one shared model. Functions make that possible.",
+    plateTitle: "def readout(choice)",
+    hintCorner: "Press 1, 2, 3 or 9 below",
+    read: (g) => ({ BLOCKS: g.BLOCKS }),
+    check: async (s, out, call) => (await call("needle_degrees", 1)) === 324 && (await call("needle_degrees", 3)) === 180,
+    readout: () => "",
+    figure: () => figFunction(),
+  },
+  {
+    id: "project",
+    minutes: 15,
+    title: "Mini project: the dial indicator",
+    idea: "Everything together. Your two functions run the gauge: readout() writes the label and needle_turns() turns the needle. Use the buttons or the arrow keys to slide the carriage.",
+    code: `BLOCKS = [18, 14, 10]
+PER_TURN = 20
+
+def readout(choice):
+    if 1 <= choice <= len(BLOCKS):
+        height = BLOCKS[choice - 1]
+        return f"block {choice} · reads {height:.1f} px"
+    return "between blocks"
+
+def needle_turns(choice):
+    return BLOCKS[choice - 1] / PER_TURN
+`,
+    challenge: "Add a 4th block that is 6 tall, press Run, then slide block 4 under the gauge.",
+    hint: "Change the first line to BLOCKS = [18, 14, 10, 6]. A 4th button appears after you run.",
+    answer: `BLOCKS = [18, 14, 10, 6]
+PER_TURN = 20
+
+def readout(choice):
+    if 1 <= choice <= len(BLOCKS):
+        height = BLOCKS[choice - 1]
+        return f"block {choice} · reads {height:.1f} px"
+    return "between blocks"
+
+def needle_turns(choice):
+    return BLOCKS[choice - 1] / PER_TURN
+`,
+    win: "You rebuilt the repo's dial indicator, and your Python is running it. You can program.",
+    repo: "Compare with the real figure: examples/dial-indicator/dial-indicator.html",
+    plateTitle: "Dial indicator",
+    hintCorner: "← → or the buttons",
+    read: (g) => ({ BLOCKS: g.BLOCKS }),
+    check: (s, out, call, view) => Array.isArray(s.BLOCKS) && s.BLOCKS.length === 4 && s.BLOCKS[3] === 6 && view.selected === 4,
+    readout: () => "",
+    figure: () => figGauge("project"),
+  },
+];
+
+function isNum(v) {
+  return typeof v === "number" && Number.isFinite(v);
+}
+function fmt(v, d) {
+  return isNum(v) ? (Math.round(v * 10 ** d) / 10 ** d).toString() : "?";
+}
+function show(v) {
+  if (v === undefined) return "—";
+  if (typeof v === "string") return JSON.stringify(v);
+  if (Array.isArray(v)) return "[" + v.map(show).join(", ") + "]";
+  return String(v);
+}
+function countLines(out, word) {
+  return out.split("\n").filter((line) => line.includes(word)).length;
+}
+function gaugeText(blocks, choice) {
+  if (!Array.isArray(blocks) || !isNum(choice)) return "set blocks and choice";
+  if (choice >= 1 && choice <= blocks.length && isNum(blocks[choice - 1])) return `block ${choice} · reads ${Number(blocks[choice - 1]).toFixed(1)} px`;
+  return "between blocks";
+}
+
+
+// The machines. Each figure turns lesson state (read from your Python) into
+// an isometric drawing made with the repo's kit, and eases between states.
+
+const VIEW_W = 640;
+const VIEW_H = 400;
+const S = (paths, style) => k.solidSvg(paths, style);
+const L = (d, style) => k.lineSvg(d, style);
+const esc = (t) => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const clampH = (v, max = 48) => (isNum(v) ? Math.max(0, Math.min(max, v)) : 0);
+const f1 = (n) => n.toFixed(1);
+
+function fitP(points, azimuth = 28, headroom = 70) {
+  return k.fitProjection(points, VIEW_W, VIEW_H, { pad: 34, azimuth, headroom });
+}
+
+function text(x, y, value, cls = "lab", anchor = "middle") {
+  return `<text class="${cls}" x="${f1(x)}" y="${f1(y)}" text-anchor="${anchor}">${esc(value)}</text>`;
+}
+function leader(a, b, cls = "leader") {
+  return `<path class="${cls}" d="M${f1(a[0])} ${f1(a[1])}L${f1(b[0])} ${f1(b[1])}"/>`;
+}
+
+function plate(P, plan, h = 6) {
+  const out = [`<path class="iso-halo" d="${k.haloOf(plan, -h, h, P)}"/>`];
+  out.push(S(k.slabOf(plan, -h, h, P, 8, 1.2), { tone: "mid" }));
+  out.push(L(k.planOutline(k.insetPlan(plan, 4), 0, P), { tone: "faint" }));
+  const screws = k.corners(plan, 8);
+  out.push(L(screws.map(([x, y]) => k.ring(x, y, 2, 0, P, 16)).join(""), { tone: "lo" }));
+  out.push(k.dotsSvg(screws.map(([x, y]) => k.iso([x, y, 0], P)), { size: 0.9 }));
+  return out.join("");
+}
+
+function block(P, cx, cy, z, h, opts = {}) {
+  if (h < 0.05) return "";
+  const w = opts.w || 16;
+  const plan = { x: cx - w / 2, y: cy - w / 2, w, d: w, r: 1 };
+  return S(k.slabOf(plan, z, h, P, 3, 0.5), { tone: "hi", crease: "lo", lit: opts.lit }) + L(k.planOutline(k.insetPlan(plan, 2), z + h, P, 3), { tone: "faint" });
+}
+
+function dial(P, cx, cy, z, r, turn) {
+  const out = [];
+  const h = 6;
+  out.push(S(k.cylinder(cx, cy, r, z, h, P, 64, 0.8), { tone: "hi", crease: "lo" }));
+  const zt = z + h;
+  out.push(L(k.knurl(cx, cy, r, zt - 2.4, zt, 84, P, 0.3), { tone: "lo" }));
+  out.push(L(k.ring(cx, cy, r - 2, zt, P, 64), { tone: "lo" }));
+  const ticks = k.radialTicks(cx, cy, r - 3, 40, 5, zt, [1.4, 3], P);
+  out.push(L(ticks.minor, { tone: "lo" }), L(ticks.major, { tone: "mid" }));
+  const sweep = Math.max(0, Math.min(turn, 1));
+  if (sweep > 0.002) {
+    const pts = [];
+    const steps = Math.max(2, Math.round(sweep * 80));
+    for (let s = 0; s <= steps; s++) {
+      const a = (s / steps) * sweep * Math.PI * 2;
+      pts.push([cx - Math.cos(a) * r * 0.55, cy + Math.sin(a) * r * 0.55]);
+    }
+    out.push(L(k.onTop(pts, zt + 0.1, P), { tone: "blue" }));
+  }
+  const a = turn * Math.PI * 2;
+  out.push(L(k.lineOnTop([cx + Math.cos(a) * 3, cy - Math.sin(a) * 3], [cx - Math.cos(a) * (r - 4), cy + Math.sin(a) * (r - 4)], zt + 0.2, P), { tone: "red" }));
+  out.push(L(k.lineOnTop([cx - (r - 1.5), cy], [cx - (r - 6), cy], zt + 0.2, P), { tone: "hi" }));
+  out.push(L(k.ring(cx, cy, 1.4, zt + 0.2, P, 16), { tone: "hi" }));
+  return out.join("");
+}
+
+// Ease numbers and arrays of numbers toward their targets.
+function easeValue(cur, tgt, a) {
+  if (Array.isArray(tgt)) return tgt.map((t, i) => easeValue(Array.isArray(cur) && isNum(cur[i]) ? cur[i] : 0, t, a));
+  if (!isNum(cur)) return tgt;
+  const next = cur + (tgt - cur) * a;
+  return Math.abs(tgt - next) < 0.01 ? tgt : next;
+}
+function settled(cur, tgt) {
+  if (Array.isArray(tgt)) return Array.isArray(cur) && cur.length === tgt.length && tgt.every((t, i) => settled(cur[i], t));
+  return cur === tgt;
+}
+
+// ---------- Lesson 1: two labelled boxes ----------
+function figVariables() {
+  const items = [
+    { key: "first_block", c: [0, 36] },
+    { key: "per_turn", c: [0, -36] },
+  ];
+  const P = fitP([...k.boxCorners({ x: -38, y: -70, w: 76, d: 140 }, -6, 0), [0, 36, 52], [0, -36, 52]]);
+  return {
+    target: (s) => ({ a: clampH(s.first_block), b: clampH(s.per_turn) }),
+    render(cur, s) {
+      const out = [plate(P, { x: -38, y: -70, w: 76, d: 140, r: 6 })];
+      const order = [...items].sort((p, q) => k.depthOf([...p.c, 0], P) - k.depthOf([...q.c, 0], P));
+      for (const it of order) {
+        const tray = { x: it.c[0] - 16, y: it.c[1] - 16, w: 32, d: 32, r: 3 };
+        out.push(S(k.slabOf(tray, 0, 4, P, 4, 0.6), { tone: "mid" }));
+        out.push(L(k.planOutline(k.insetPlan(tray, 3), 4, P), { tone: "faint" }));
+        out.push(block(P, ...it.c, 4, it.key === "first_block" ? cur.a : cur.b, { w: 14, lit: it.key === "first_block" }));
+      }
+      for (const it of items) {
+        const h = it.key === "first_block" ? cur.a : cur.b;
+        const [x, y] = k.iso([...it.c, 4 + h], P);
+        const raw = s[it.key];
+        out.push(leader([x, y - 6], [x, y - 34]));
+        out.push(text(x, y - 66, it.key, "lab muted"));
+        out.push(text(x, y - 42, raw === undefined ? "(no box yet)" : "= " + show(raw), raw === undefined || !isNum(raw) ? "lab-big warn" : "lab-big"));
+      }
+      return out.join("");
+    },
+  };
+}
+
+// ---------- Lesson 2: block → dial ----------
+function figMath() {
+  const B = [0, 42];
+  const D = [0, -30];
+  const P = fitP([...k.boxCorners({ x: -40, y: -66, w: 80, d: 136 }, -6, 0), [0, 42, 50]]);
+  return {
+    target: (s) => ({ h: clampH(s.block), t: isNum(s.turns) ? Math.max(0, Math.min(s.turns, 3)) : 0 }),
+    render(cur, s) {
+      const out = [plate(P, { x: -40, y: -66, w: 80, d: 136, r: 6 })];
+      const parts = [
+        { at: B, draw: () => block(P, ...B, 0, cur.h, { lit: true }) },
+        { at: D, draw: () => dial(P, ...D, 0, 28, cur.t) },
+      ].sort((p, q) => k.depthOf([...p.at, 0], P) - k.depthOf([...q.at, 0], P));
+      parts.forEach((p) => out.push(p.draw()));
+      const bt = k.iso([...B, cur.h], P);
+      const dt = k.iso([...D, 6], P);
+      out.push(leader([bt[0], bt[1] - 6], [bt[0], bt[1] - 30]));
+      out.push(text(bt[0], bt[1] - 62, "block", "lab muted"));
+      out.push(text(bt[0], bt[1] - 38, isNum(s.block) ? `${s.block} tall` : show(s.block), "lab-big"));
+      out.push(text((bt[0] + dt[0]) / 2, Math.min(bt[1], dt[1]) - 104, `÷ ${isNum(s.per_turn) ? s.per_turn : "?"}`, "lab-big accent"));
+      out.push(leader([dt[0], dt[1] - 30], [dt[0], dt[1] - 64]));
+      out.push(text(dt[0], dt[1] - 96, "needle", "lab muted"));
+      out.push(text(dt[0], dt[1] - 72, isNum(s.turns) ? `${fmt(s.turns, 3)} turn` : "?", "lab-big"));
+      return out.join("");
+    },
+  };
+}
+
+// ---------- Lessons 3 and 4: a row of blocks ----------
+function figList(loop) {
+  const GAP = 26;
+  const MAX = 8;
+  const half = ((MAX - 1) / 2) * GAP + 20;
+  const P = fitP([...k.boxCorners({ x: -26, y: -half - 6, w: 52, d: half * 2 + 12 }, -6, 0), [0, half - 20, 48]], 24, 90);
+  const ys = (n) => Array.from({ length: n }, (_, i) => ((n - 1) / 2) * GAP - i * GAP);
+  return {
+    target(s) {
+      const list = Array.isArray(s.blocks) ? s.blocks.slice(0, MAX) : [];
+      return { hs: list.map((v) => clampH(v)), ys: ys(list.length), span: list.length };
+    },
+    render(cur, s, view) {
+      const out = [plate(P, { x: -26, y: -half - 6, w: 52, d: half * 2 + 12, r: 6 })];
+      const n = cur.hs.length;
+      if (n) {
+        const top = Math.max(...cur.ys) + 14;
+        const bottom = Math.min(...cur.ys) - 14;
+        const car = { x: -14, y: bottom, w: 28, d: Math.max(8, top - bottom), r: 3 };
+        out.push(S(k.slabOf(car, 0, 4, P, 5, 0.6), { tone: "mid" }));
+      }
+      const order = cur.hs.map((_, i) => i).sort((a, b) => k.depthOf([0, cur.ys[a], 0], P) - k.depthOf([0, cur.ys[b], 0], P));
+      for (const i of order) out.push(block(P, 0, cur.ys[i], 4, cur.hs[i], { lit: loop ? view.pass === i : i === 0 }));
+      const list = Array.isArray(s.blocks) ? s.blocks : [];
+      cur.hs.forEach((h, i) => {
+        const [x, y] = k.iso([0, cur.ys[i], 4 + h], P);
+        if (loop) {
+          if (view.pass === i) {
+            out.push(leader([x, y - 6], [x, y - 26], "leader accent-line"));
+            out.push(text(x, y - 56, `pass ${i + 1}`, "lab muted"));
+            out.push(text(x, y - 34, `height = ${show(list[i])}`, "lab-big accent"));
+          } else if (view.pass > i) {
+            out.push(text(x, y - 14, "✓", "lab good"));
+          }
+        } else {
+          out.push(text(x, y - 56, `[${i}]`, i === 0 ? "lab-big bad" : "lab-big"));
+          out.push(text(x, y - 34, show(list[i]), "lab"));
+          const base = k.iso([14, cur.ys[i], 4], P);
+          out.push(text(base[0] + 4, base[1] + 26, `block ${i + 1}`, "lab-small muted"));
+        }
+      });
+      if (!n) out.push(text(VIEW_W / 2, 60, Array.isArray(s.blocks) ? "the list is empty" : "run the code to load the list", "lab muted"));
+      if (Array.isArray(s.blocks) && s.blocks.length > MAX) out.push(text(VIEW_W / 2, VIEW_H - 18, `showing the first ${MAX} of ${s.blocks.length}`, "lab-small muted"));
+      return out.join("");
+    },
+  };
+}
+
+// ---------- Lessons 5 and 7: the gauge over a sliding carriage ----------
+function figGauge(mode) {
+  const STEP = 30;
+  const G = 50;
+  const MAX = 5;
+  const DZ = 60;
+  const POST = [-36, G];
+  const plateP = { x: -48, y: G - STEP * (MAX - 1) - 26, w: 92, d: STEP * (MAX - 1) * 2 + 52, r: 6 };
+  const P = fitP([...k.boxCorners(plateP, -6, 0), [POST[0], POST[1], 82], [0, G + 26, DZ + 6]], 26, 40);
+  const offsetFor = (list, choice) => (isNum(choice) && choice >= 1 && choice <= list.length ? STEP * (choice - 1) : -STEP * 0.62);
+  return {
+    target(s, view) {
+      const list = (mode === "if" ? s.blocks : s.BLOCKS) || [];
+      const hs = (Array.isArray(list) ? list : []).slice(0, MAX).map((v) => clampH(v, 40));
+      const choice = mode === "if" ? s.choice : view.selected;
+      const off = offsetFor(hs, choice);
+      const valid = isNum(choice) && choice >= 1 && choice <= hs.length;
+      const tip = valid ? hs[choice - 1] : 0;
+      const turns = mode === "if" ? tip / 20 : isNum(view.turns) ? view.turns : 0;
+      return { hs, off, tip, t: Math.max(0, Math.min(turns, 3)) };
+    },
+    render(cur, s, view) {
+      const out = [plate(P, plateP)];
+      for (const x of [-10, 6]) out.push(S(k.slabOf({ x, y: plateP.y + 10, w: 4, d: plateP.d - 20, r: 1 }, 0, 2, P, 3, 0.3), { tone: "mid" }));
+      // post (behind the carriage)
+      out.push(S(k.slabOf({ x: POST[0] - 10, y: POST[1] - 10, w: 20, d: 20, r: 2 }, 0, 10, P, 4, 0.6), { tone: "mid" }));
+      out.push(S(k.cylinder(...POST, 2.8, 10, DZ + 10, P, 24), { tone: "mid", crease: "none" }));
+      // carriage and blocks
+      const n = cur.hs.length;
+      const ys = cur.hs.map((_, i) => G - STEP * i + cur.off);
+      const car = { x: -14, y: (n ? ys[n - 1] : G) - 14, w: 28, d: (n ? ys[0] - ys[n - 1] : 0) + 28, r: 3 };
+      out.push(S(k.slabOf(car, 2, 4, P, 5, 0.6), { tone: "mid" }));
+      const order = cur.hs.map((_, i) => i).sort((a, b) => k.depthOf([0, ys[a], 0], P) - k.depthOf([0, ys[b], 0], P));
+      for (const i of order) out.push(block(P, 0, ys[i], 6, cur.hs[i], { lit: Math.abs(ys[i] - G) < 4 }));
+      // plunger, arm, dial
+      const tipZ = 6 + cur.tip;
+      out.push(S(k.cylinder(0, G, 2.4, tipZ, 2, P, 20), { tone: "hi", lit: true }));
+      out.push(S(k.cylinder(0, G, 1.3, tipZ + 2, DZ - tipZ - 2, P, 16), { tone: "hi", crease: "none", lit: true }));
+      out.push(S(k.slabOf({ x: POST[0] + 3, y: G - 3, w: -POST[0] - 26 + 2, d: 6, r: 1.5 }, DZ + 1, 4, P, 3, 0.4), { tone: "mid" }));
+      out.push(dial(P, 0, G, DZ, 24, cur.t));
+      // labels
+      const d = k.iso([0, G, DZ + 6], P);
+      const textNow = mode === "if" ? gaugeText(s.blocks, s.choice) : view.readoutText || "press a button";
+      const bad = /between/.test(textNow);
+      out.push(leader([d[0] - 20, d[1] - 6], [150, 52]));
+      out.push(text(16, 26, mode === "if" ? `choice = ${show(s.choice)}` : `readout(${view.selected ?? "?"})`, "lab muted", "start"));
+      out.push(text(16, 50, textNow, bad ? "lab-big bad" : "lab-big good", "start"));
+      if (bad) {
+        const g = k.iso([0, G, 6], P);
+        out.push(`<circle class="pin-bad" cx="${f1(g[0])}" cy="${f1(g[1])}" r="5"/>`);
+      }
+      cur.hs.forEach((h, i) => {
+        const base = k.iso([14, ys[i], 6], P);
+        out.push(text(base[0] + 6, base[1] + 24, String(i + 1), "lab-small muted"));
+      });
+      return out.join("");
+    },
+  };
+}
+
+// ---------- Lesson 6: a function is a machine ----------
+function figFunction() {
+  const box = { x: -24, y: -26, w: 48, d: 52, r: 4 };
+  const DIAL = [0, -80];
+  const P = fitP([...k.boxCorners({ x: -40, y: -112, w: 80, d: 200 }, -6, 0), [0, 0, 40]], 26, 120);
+  return {
+    target: (s, view) => ({ t: isNum(view.deg) ? Math.max(0, Math.min(view.deg / 360, 3)) : 0, tok: view.input === undefined ? 0 : 1 }),
+    render(cur, s, view) {
+      const out = [plate(P, { x: -40, y: -112, w: 80, d: 200, r: 6 })];
+      out.push(dial(P, ...DIAL, 0, 22, cur.t));
+      out.push(S(k.slabOf(box, 0, 30, P, 6, 1), { tone: "hi", crease: "lo" }));
+      out.push(L(k.planOutline(k.insetPlan(box, 4), 30, P), { tone: "faint" }));
+      out.push(k.faceTextSvg(k.topMatrix([0, 0], 30, P, "y"), "def", { size: 6, tone: "hi", anchor: "middle" }));
+      out.push(S(k.slabOf({ x: -10, y: box.y + box.d - 1, w: 20, d: 4, r: 1 }, 10, 10, P, 2), { tone: "mid" }));
+      if (view.input !== undefined) {
+        out.push(S(k.cylinder(0, 62, 9, 0, 6, P, 40, 0.6), { tone: "hi", crease: "lo", lit: true }));
+        out.push(k.faceTextSvg(k.topMatrix([0, 62], 6, P, "y"), String(view.input), { size: 9, tone: "hi", anchor: "middle" }));
+      }
+      const tok = k.iso([0, 62, 6], P);
+      const inl = k.iso([0, 28, 20], P);
+      const outl = k.iso([0, -28, 14], P);
+      const dl = k.iso([...DIAL, 6], P);
+      out.push(`<path class="flow" d="M${f1(tok[0] - 6)} ${f1(tok[1] - 14)}Q${f1((tok[0] + inl[0]) / 2 - 10)} ${f1(inl[1] - 40)} ${f1(inl[0] - 10)} ${f1(inl[1] - 8)}"/>`);
+      out.push(`<path class="flow" d="M${f1(outl[0] + 6)} ${f1(outl[1] - 4)}Q${f1((outl[0] + dl[0]) / 2 + 10)} ${f1(dl[1] - 50)} ${f1(dl[0] + 4)} ${f1(dl[1] - 16)}"/>`);
+      out.push(text(tok[0] - 30, tok[1] + 6, "input", "lab muted", "end"));
+      out.push(text(tok[0] - 30, tok[1] + 28, view.input === undefined ? "press a button" : `choice = ${view.input}`, "lab-big", "end"));
+      const bt = k.iso([0, 0, 30], P);
+      out.push(text(bt[0], bt[1] - 64, "your function runs inside", "lab muted"));
+      out.push(text(VIEW_W - 16, 26, "readout() returns", "lab muted", "end"));
+      out.push(text(VIEW_W - 16, 50, view.output === undefined ? "…" : view.output, /between|Error/.test(view.output || "") ? "lab-big bad" : "lab-big good", "end"));
+      out.push(text(VIEW_W - 16, 82, "needle_degrees() returns", "lab muted", "end"));
+      out.push(text(VIEW_W - 16, 106, view.degText === undefined ? "…" : view.degText, isNum(view.deg) && view.deg > 0 ? "lab-big accent" : "lab-big bad", "end"));
+      return out.join("");
+    },
+  };
+}
+
+
+// Python Bench: runs your Python in the page (Skulpt) and lets it drive the machine.
+
+const $ = (id) => document.getElementById(id);
+const STORE = "python-bench-v1";
+const still = matchMedia("(prefers-reduced-motion: reduce)");
+
+let progress = { done: {}, code: {}, at: 0 };
+try {
+  const saved = JSON.parse(localStorage.getItem(STORE) || "null");
+  if (saved && typeof saved === "object") progress = { ...progress, ...saved };
+} catch {}
+const save = () => {
+  try {
+    localStorage.setItem(STORE, JSON.stringify(progress));
+  } catch {}
+};
+
+// ---------- Python ----------
+const pyReady = typeof Sk !== "undefined";
+if (pyReady) {
+  Sk.configure({
+    output: (t) => (runOut += t),
+    read: (f) => {
+      if (!Sk.builtinFiles || !Sk.builtinFiles.files[f]) throw new Error("File not found: " + f);
+      return Sk.builtinFiles.files[f];
+    },
+    __future__: Sk.python3,
+    inputfun: () => "",
+    inputfunTakesPrompt: true,
+    yieldLimit: 50,
+  });
+}
+let runOut = "";
+
+async function runPython(code) {
+  runOut = "";
+  Sk.execLimit = 4000;
+  try {
+    const mod = await Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, code, true));
+    return { ok: true, out: runOut, mod };
+  } catch (e) {
+    return { ok: false, out: runOut, err: String(e && e.toString ? e.toString() : e) };
+  }
+}
+
+function globalsOf(mod) {
+  const g = {};
+  for (const [name, value] of Object.entries(mod.$d)) {
+    if (name.startsWith("__")) continue;
+    if (value instanceof Sk.builtin.func) {
+      g[name] = { fn: true };
+      continue;
+    }
+    try {
+      g[name] = Sk.ffi.remapToJs(value);
+    } catch {}
+  }
+  return g;
+}
+
+async function callPython(mod, name, arg) {
+  const fn = mod && mod.$d[name];
+  if (!fn) throw new Error(`NameError: name '${name}' is not defined`);
+  Sk.execLimit = 2000;
+  Sk.execStart = Date.now();
+  const result = await Sk.misceval.asyncToPromise(() => Sk.misceval.callsimOrSuspendArray(fn, [Sk.ffi.remapToPy(arg)]));
+  return Sk.ffi.remapToJs(result);
+}
+
+// Plain-English versions of Python's error messages.
+function explain(raw) {
+  const line = (raw.match(/on line (\d+)/) || [])[1];
+  const type = (raw.match(/^(\w+Error|\w+Exception)/) || [])[1] || "Error";
+  const where = line ? ` on line ${line}` : "";
+  const name = (raw.match(/name '([^']+)'/) || [])[1];
+  const tips = {
+    NameError: `Python doesn't know the name ${name ? `"${name}"` : "you used"}${where}. Check the spelling (capitals count) and make sure the line that creates it comes first.`,
+    IndexError: `You asked for a position the list doesn't have${where}. Positions start at 0, so the last one is len(list) - 1.`,
+    SyntaxError: `Python couldn't read line ${line || "?"}. Look for a missing colon :, a bracket or quote that isn't closed, or a typo.`,
+    ParseError: `Python couldn't read line ${line || "?"}. Look for a missing colon :, a bracket or quote that isn't closed, or a typo.`,
+    IndentationError: `The spaces at the start of line ${line || "?"} don't line up. Lines inside an if, for or def need 4 spaces in front.`,
+    TypeError: `Two kinds of value that don't fit together met${where}, like text + a number. Check what each variable holds.`,
+    ZeroDivisionError: `Something was divided by zero${where}.`,
+    TimeoutError: "The code ran for too long and was stopped. A while loop that never ends is the usual cause.",
+    ValueError: `A value had the right type but the wrong content${where}, like int("abc").`,
+  };
+  return { type, line, text: tips[type] || `Python stopped${where}. Read the message above for the reason.` };
+}
+
+// ---------- page state ----------
+let index = Math.min(Math.max(0, progress.at | 0), LESSONS.length - 1);
+let lesson, fig, mod, state, out, view, cur, tgt, frame, loopTimer, ran, won;
+
+function setTheme() {
+  const root = document.documentElement.dataset.theme;
+  const dark = root ? root === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  $("fig").dataset.theme = dark ? "dark" : "light";
+}
+setTheme();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", setTheme);
+new MutationObserver(setTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+function buildNav() {
+  $("chips").innerHTML = LESSONS.map(
+    (l, i) => `<button class="chip" type="button" data-i="${i}" aria-label="Lesson ${i + 1}: ${l.title}">${progress.done[l.id] ? "✓" : i + 1}</button>`,
+  ).join("");
+  $("chips").querySelectorAll(".chip").forEach((b) => {
+    const i = Number(b.dataset.i);
+    b.classList.toggle("done", !!progress.done[LESSONS[i].id]);
+    if (i === index) b.setAttribute("aria-current", "step");
+    b.addEventListener("click", () => open(i));
+  });
+  const count = LESSONS.filter((l) => progress.done[l.id]).length;
+  $("progress-text").textContent = `${count} of ${LESSONS.length} done`;
+  $("progress-bar").style.setProperty("--p", count / LESSONS.length);
+}
+
+function open(i) {
+  index = i;
+  progress.at = i;
+  save();
+  lesson = LESSONS[i];
+  fig = lesson.figure();
+  mod = null;
+  state = {};
+  out = "";
+  view = { pass: -1 };
+  ran = false;
+  won = !!progress.done[lesson.id];
+  clearInterval(loopTimer);
+  $("eyebrow").textContent = `Lesson ${i + 1} of ${LESSONS.length} · about ${lesson.minutes} min`;
+  $("title").textContent = lesson.title;
+  $("idea").textContent = lesson.idea;
+  $("challenge").textContent = lesson.challenge;
+  $("hint").textContent = lesson.hint;
+  $("win-text").textContent = lesson.win;
+  $("repo").textContent = lesson.repo;
+  $("corner-fig").textContent = `Fig ${i + 1}`;
+  $("corner-title").textContent = lesson.plateTitle;
+  $("corner-hint").textContent = lesson.hintCorner;
+  $("code").value = progress.code[lesson.id] ?? lesson.code;
+  $("hint-box").open = false;
+  $("prev").disabled = i === 0;
+  $("next").textContent = i === LESSONS.length - 1 ? "Back to lesson 1" : "Next lesson →";
+  showOutput("", null);
+  buildControls();
+  buildNav();
+  steps();
+  cur = null;
+  run({ quiet: true });
+  window.scrollTo({ top: 0, behavior: still.matches ? "auto" : "smooth" });
+}
+
+function steps() {
+  $("s-run").classList.toggle("done", ran || won);
+  $("s-change").classList.toggle("done", won);
+  $("s-win").classList.toggle("done", won);
+  $("win-text").hidden = !won;
+  $("next").classList.toggle("ready", won);
+}
+
+function showOutput(text, error) {
+  $("out").textContent = text || (error ? "" : "(nothing printed yet)");
+  $("out").classList.toggle("empty", !text);
+  const box = $("err");
+  if (error) {
+    const e = explain(error);
+    box.hidden = false;
+    $("err-type").textContent = error.replace(/\s+on line \d+.*$/, "");
+    $("err-help").textContent = e.text;
+  } else {
+    box.hidden = true;
+  }
+}
+
+async function run({ quiet = false } = {}) {
+  if (!pyReady) {
+    showOutput("", "Error: Python didn't load. Check your connection and reload the page.");
+    return;
+  }
+  const code = $("code").value;
+  $("run").disabled = true;
+  const result = await runPython(code);
+  $("run").disabled = false;
+  out = result.out;
+  if (!result.ok) {
+    showOutput(out, result.err);
+    draw();
+    return;
+  }
+  mod = result.mod;
+  state = lesson.read(globalsOf(mod));
+  if (!quiet) ran = true;
+  await afterRun();
+  if (lesson.id === "loops") playLoop();
+  else showOutput(out, null);
+  if (!quiet) await judge();
+  steps();
+  draw();
+}
+
+async function judge() {
+  if (won) return;
+  let ok = false;
+  try {
+    ok = await lesson.check(state, out, (name, arg) => callPython(mod, name, arg), view);
+  } catch {
+    ok = false;
+  }
+  if (ok) {
+    won = true;
+    progress.done[lesson.id] = true;
+    save();
+    buildNav();
+    steps();
+    $("s-win").scrollIntoView({ block: "nearest", behavior: still.matches ? "auto" : "smooth" });
+  }
+}
+
+// Lesson-specific work after each run (calling the user's functions, etc.)
+async function afterRun() {
+  if (lesson.id === "functions") {
+    if (view.input !== undefined) await feed(view.input);
+  }
+  if (lesson.id === "project") {
+    const n = Array.isArray(state.BLOCKS) ? Math.min(state.BLOCKS.length, 5) : 0;
+    if (!view.selected || view.selected > n) view.selected = n ? 1 : undefined;
+    buildControls();
+    if (view.selected) await select(view.selected, false);
+  }
+}
+
+function playLoop() {
+  clearInterval(loopTimer);
+  const lines = out.split("\n").filter((l, i, all) => l || i < all.length - 1);
+  const n = Array.isArray(state.blocks) ? state.blocks.length : 0;
+  if (still.matches || !n) {
+    view.pass = n;
+    showOutput(out, null);
+    draw();
+    return;
+  }
+  view.pass = 0;
+  showOutput(lines.slice(0, 1).join("\n"), null);
+  draw();
+  loopTimer = setInterval(() => {
+    view.pass += 1;
+    showOutput(lines.slice(0, view.pass + 1).join("\n"), null);
+    if (view.pass >= n) {
+      clearInterval(loopTimer);
+      showOutput(out, null);
+    }
+    draw();
+  }, 750);
+}
+
+async function feed(n) {
+  view.input = n;
+  try {
+    view.output = String(await callPython(mod, "readout", n));
+  } catch (e) {
+    view.output = explain(String(e)).type;
+  }
+  try {
+    const d = await callPython(mod, "needle_degrees", n);
+    view.deg = typeof d === "number" ? d : NaN;
+    view.degText = typeof d === "number" ? `${Math.round(d * 10) / 10}°` : show(d);
+  } catch (e) {
+    view.deg = NaN;
+    view.degText = explain(String(e)).type;
+    showOutput(out + `\nneedle_degrees(${n}) stopped:\n`, String(e));
+  }
+  draw();
+}
+
+async function select(n, judgeIt = true) {
+  view.selected = n;
+  try {
+    view.readoutText = String(await callPython(mod, "readout", n));
+  } catch (e) {
+    view.readoutText = explain(String(e)).type;
+    showOutput(out, String(e));
+  }
+  try {
+    view.turns = await callPython(mod, "needle_turns", n);
+  } catch (e) {
+    view.turns = 0;
+    showOutput(out, String(e));
+  }
+  $("controls").querySelectorAll("button[data-sel]").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.sel) === n)));
+  if (judgeIt) {
+    await judge();
+    steps();
+  }
+  draw();
+}
+
+function setVar(name, value) {
+  const re = new RegExp(`^(${name}\\s*=\\s*)([^#\\n]*?)(\\s*#.*)?$`, "m");
+  const code = $("code").value;
+  if (!re.test(code)) return false;
+  $("code").value = code.replace(re, (_, a, __, c) => `${a}${value}${c || ""}`);
+  progress.code[lesson.id] = $("code").value;
+  save();
+  return true;
+}
+
+function buildControls() {
+  const c = $("controls");
+  const btn = (label, attrs = "") => `<button class="ctl" type="button" ${attrs}>${label}</button>`;
+  if (lesson.id === "variables") {
+    c.innerHTML = `<span class="ctl-label">Try it from here:</span>${btn("first_block − 4", 'data-d="-4"')}${btn("first_block + 4", 'data-d="4"')}`;
+    c.querySelectorAll("button").forEach((b) =>
+      b.addEventListener("click", () => {
+        const now = isNum(state.first_block) ? state.first_block : 18;
+        if (setVar("first_block", Math.max(0, now + Number(b.dataset.d)))) run();
+      }),
+    );
+  } else if (lesson.id === "if-else") {
+    c.innerHTML = `<span class="ctl-label">Set choice:</span>${[1, 2, 3, 0, 7].map((n) => btn(String(n), `data-n="${n}"`)).join("")}`;
+    c.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => setVar("choice", b.dataset.n) && run()));
+  } else if (lesson.id === "functions") {
+    c.innerHTML = `<span class="ctl-label">Feed the machine:</span>${[1, 2, 3, 9].map((n) => btn(`readout(${n})`, `data-n="${n}"`)).join("")}`;
+    c.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => feed(Number(b.dataset.n))));
+  } else if (lesson.id === "project") {
+    const n = Array.isArray(state.BLOCKS) ? Math.min(state.BLOCKS.length, 5) : 0;
+    c.innerHTML = n
+      ? `<span class="ctl-label">Slide block:</span>${Array.from({ length: n }, (_, i) => btn(String(i + 1), `data-sel="${i + 1}" aria-pressed="${view.selected === i + 1}"`)).join("")}`
+      : `<span class="ctl-label">Run the code to load the blocks.</span>`;
+    c.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => select(Number(b.dataset.sel))));
+  } else if (lesson.id === "loops") {
+    c.innerHTML = `<span class="ctl-label">Watch again:</span>${btn("Replay the loop", 'id="replay"')}`;
+    $("replay").addEventListener("click", playLoop);
+  } else {
+    c.innerHTML = `<span class="ctl-label">Change the code on the right, then press Run.</span>`;
+  }
+}
+
+// ---------- drawing ----------
+function draw() {
+  tgt = fig.target(state, view);
+  if (!cur || still.matches) cur = structuredClone(tgt);
+  paint();
+  if (!frame) {
+    let last = 0;
+    const tick = (now) => {
+      const dt = last ? Math.min((now - last) / 1000, 1 / 20) : 1 / 60;
+      last = now;
+      const a = 1 - Math.exp(-dt / 0.16);
+      for (const key of Object.keys(tgt)) cur[key] = easeValue(cur[key], tgt[key], a);
+      paint();
+      const done = Object.keys(tgt).every((key) => settled(cur[key], tgt[key]));
+      frame = done ? 0 : requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+  }
+}
+
+function paint() {
+  $("stage").innerHTML = `<svg class="iso-svg" viewBox="0 0 ${VIEW_W} ${VIEW_H}" role="img" aria-label="${esc(lesson.title)}: ${esc(lesson.readout(state) || view.readoutText || "")}">${fig.render(cur, state, view)}</svg>`;
+  const r = lesson.readout(state) || view.readoutText || view.output || "";
+  $("corner-readout").textContent = r;
+}
+
+// ---------- wiring ----------
+$("run").addEventListener("click", () => run());
+$("reset").addEventListener("click", () => {
+  $("code").value = lesson.code;
+  delete progress.code[lesson.id];
+  save();
+  run({ quiet: true });
+});
+$("answer").addEventListener("click", () => {
+  $("code").value = lesson.answer;
+  progress.code[lesson.id] = lesson.answer;
+  save();
+  $("code").focus();
+});
+$("prev").addEventListener("click", () => index > 0 && open(index - 1));
+$("next").addEventListener("click", () => open(index === LESSONS.length - 1 ? 0 : index + 1));
+
+let saveTimer = 0;
+$("code").addEventListener("input", () => {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    progress.code[lesson.id] = $("code").value;
+    save();
+  }, 300);
+});
+$("code").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault();
+    run();
+    return;
+  }
+  if (e.key === "Tab" && !e.shiftKey) {
+    e.preventDefault();
+    const t = e.target;
+    const s = t.selectionStart;
+    t.setRangeText("    ", s, t.selectionEnd, "end");
+    t.dispatchEvent(new Event("input"));
+  }
+});
+$("stage").addEventListener("keydown", (e) => {
+  if (lesson.id !== "project" || !Array.isArray(state.BLOCKS)) return;
+  const n = Math.min(state.BLOCKS.length, 5);
+  let to = null;
+  if (e.key === "ArrowRight" || e.key === "ArrowDown") to = Math.min(n, (view.selected || 1) + 1);
+  if (e.key === "ArrowLeft" || e.key === "ArrowUp") to = Math.max(1, (view.selected || 1) - 1);
+  if (to === null) return;
+  e.preventDefault();
+  select(to);
+});
+
+if (!pyReady) $("py-status").hidden = false;
+open(index);
+
+</script>
+</body></html>
